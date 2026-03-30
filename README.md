@@ -8,6 +8,7 @@ Model Context Protocol](https://github.com/modelcontextprotocol/ext-apps/tree/ma
 - **higher-ed-fred-analysis:** Experiment to create sophisticated economic data analyses and visualizations for higher education stakeholders using FRED (Federal Reserve Economic Data)
 - **skill-creator:** Guide for creating effective skills (Source: [Anthropic](https://github.com/anthropics/skills/tree/main/skills/skill-creator))
 - **spec-driven-dev:** Guide for spec-based agent-driven development similar to Kiro, but for use with other agents
+- **vignette:** Create animated product vignettes — short, cinematic HTML demos that showcase a product feature or workflow
 
 ## License
 
