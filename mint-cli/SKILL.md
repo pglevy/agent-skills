@@ -7,12 +7,26 @@ description: Guide for querying Sailwind design tokens using the Mint CLI. Use w
 
 Mint is a CLI tool that queries Sailwind design tokens. Use it to look up colors, typography, spacing, and semantic tokens when building UI components.
 
-## How to invoke
+## Setup
 
-All commands run from the `mint/` workspace folder:
+Mint is not yet published to npm. To use it, clone the repo, build it, and link the binary so it's available in your terminal.
 
 ```bash
-npx tsx src/cli.ts <command> [options]
+git clone https://github.com/pglevy/mint.git
+cd mint
+npm install
+npm run build
+npm link
+```
+
+After linking, `mint` is available globally in your terminal sessions.
+
+> Once mint is published to npm, installation will be `npm install -g @sailwind/mint` (or as a dev dependency in sailwind-starter projects).
+
+## How to invoke
+
+```bash
+mint <command> [options]
 ```
 
 ## Commands
@@ -22,10 +36,10 @@ npx tsx src/cli.ts <command> [options]
 Show all tokens grouped by category, or filter by category:
 
 ```bash
-npx tsx src/cli.ts list
-npx tsx src/cli.ts list --category color
-npx tsx src/cli.ts list --category typography
-npx tsx src/cli.ts list --category spacing
+mint list
+mint list --category color
+mint list --category typography
+mint list --category spacing
 ```
 
 ### Query tokens as JSON
@@ -33,9 +47,9 @@ npx tsx src/cli.ts list --category spacing
 Get structured DTCG JSON output, with optional category and family filters:
 
 ```bash
-npx tsx src/cli.ts tokens
-npx tsx src/cli.ts tokens --category color --family red
-npx tsx src/cli.ts tokens --category spacing
+mint tokens
+mint tokens --category color --family red
+mint tokens --category spacing
 ```
 
 ### Export tokens
@@ -43,8 +57,8 @@ npx tsx src/cli.ts tokens --category spacing
 Export the full token set or a filtered subset as DTCG JSON:
 
 ```bash
-npx tsx src/cli.ts export
-npx tsx src/cli.ts export --category color --out color-tokens.json
+mint export
+mint export --category color --out color-tokens.json
 ```
 
 ### MCP schema
@@ -52,7 +66,7 @@ npx tsx src/cli.ts export --category color --out color-tokens.json
 Output the MCP tool definition schema:
 
 ```bash
-npx tsx src/cli.ts mcp-schema
+mint mcp-schema
 ```
 
 ## Token categories
