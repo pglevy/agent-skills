@@ -173,83 +173,14 @@ single source of truth — do not hardcode colors, fonts, spacing, or gradients.
 Fetch the DTCG tokens file at the start of every vignette build:
 
 ```
-https://raw.githubusercontent.com/pglevy/sailwind/main/public/tokens.json
+https://cdn.jsdelivr.net/gh/pglevy/sailwind@v0.8.0/public/tokens.json
 ```
 
 If the fetch fails, fall back to a local copy at `node_modules/@pglevy/sailwind/dist/tokens.json`
 (install with `npm install --save-dev @pglevy/sailwind` if needed).
 
-### Token Structure
-
-The file has four top-level categories: `color`, `typography`, `spacing`, `gradient`.
-Every leaf token has `$value`, `$type`, and `$description`. Here's a representative sample:
-
-```json
-{
-  "color": {
-    "blue": {
-      "500": { "$value": "#2322F0", "$type": "color" }
-    },
-    "semantic": {
-      "accent": { "$value": "{color.blue.500}", "$type": "color" }
-    }
-  },
-  "typography": {
-    "font-family": {
-      "base": { "$value": ["Open Sans", "system-ui", "-apple-system", "sans-serif"], "$type": "fontFamily" },
-      "code": { "$value": ["Geist Mono", "Fira Code", "monospace"], "$type": "fontFamily" }
-    },
-    "font-weight": {
-      "base": { "$value": 400, "$type": "fontWeight" }
-    },
-    "text-size": {
-      "3xl": { "$value": { "value": 1.75, "unit": "rem" }, "$type": "dimension" }
-    }
-  },
-  "spacing": {
-    "margin": {
-      "standard": { "$value": { "value": 1, "unit": "rem" }, "$type": "dimension" }
-    },
-    "radius": {
-      "sm": { "$value": { "value": 0.25, "unit": "rem" }, "$type": "dimension" }
-    }
-  },
-  "gradient": {
-    "header": {
-      "$value": [
-        { "color": "#2322F0", "position": 0 },
-        { "color": "#E21496", "position": 0.57 },
-        { "color": "#FFC008", "position": 0.83 },
-        { "color": "#FFD948", "position": 1 }
-      ],
-      "$type": "gradient"
-    }
-  }
-}
-```
-
-### Using Tokens in Vignettes
-
-When building the CSS for a vignette, read the tokens file and translate values into
-CSS custom properties. Only include the families actually needed:
-
-```css
-:root {
-  /* From color.blue.500.$value, color.blue.700.$value, etc. */
-  --blue-500: #2322F0;
-  --blue-700: #152B99;
-  /* From typography.font-family.base.$value (join with commas, quote multi-word names) */
-  --font: 'Open Sans', system-ui, -apple-system, sans-serif;
-  /* From typography.font-family.code.$value */
-  --mono: 'Geist Mono', 'Fira Code', monospace;
-}
-```
-
-For gradients, reconstruct the CSS from the stop array:
-```css
-/* From gradient.header.$value stops */
-background: linear-gradient(90deg, #2322F0 0%, #E21496 57%, #FFC008 83%, #FFD948 100%);
-```
+### Token Usage
+Resolve all token aliases (e.g. `{color.blue.500}`) to their actual values when writing CSS. Base all design decisions on what you find in the fetched file — do not guess or infer token values.
 
 ## Technical Notes
 
