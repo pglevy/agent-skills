@@ -25,6 +25,11 @@ The user will provide one or both of:
 
 4. Save files into an `html/` subfolder within the current working directory (or wherever the user specifies).
 
+5. After all HTML files are saved, run the screenshot script to sync the `screenshots/` folder:
+   ```bash
+   bash sailwind-mock/scripts/screenshot.sh
+   ```
+
 ## HTML Generation Rules
 
 - Each file must be fully self-contained (no external CSS files, no shared stylesheets)
@@ -54,3 +59,19 @@ Resolve all token aliases (e.g. `{color.blue.500}`) to their actual values when 
 - One `.html` file per screen/page
 - Files placed in `html/` subfolder
 - Pages should be visually coherent as a set
+
+## Screenshots
+
+A script at `sailwind-mock/scripts/screenshot.sh` captures PNG screenshots of all HTML files.
+
+- Screenshots are saved to a `screenshots/` folder at the project root
+- Filename matches the HTML file without the `.html` extension
+- Resolution: 1600×1000 at 2x (retina), resulting in 3200×2000px images
+- Hooks auto-run this script whenever files are created or edited in `html/`
+
+To run manually from the project root:
+```bash
+bash sailwind-mock/scripts/screenshot.sh
+```
+
+Requires `uv` to be installed (`brew install uv` or https://docs.astral.sh/uv/getting-started/installation/).
