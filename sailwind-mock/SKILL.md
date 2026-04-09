@@ -25,10 +25,7 @@ The user will provide one or both of:
 
 4. Save files into an `html/` subfolder within the current working directory (or wherever the user specifies).
 
-5. After all HTML files are saved, run the screenshot script to sync the `screenshots/` folder:
-   ```bash
-   bash sailwind-mock/scripts/screenshot.sh
-   ```
+5. After all HTML files are saved, run the screenshot script to sync the `screenshots/` folder. The script is located at `scripts/screenshot.sh` within the global skills directory where this skill is installed. Locate and run it from there — do not copy it into the project.
 
 ## HTML Generation Rules
 
@@ -62,16 +59,13 @@ Resolve all token aliases (e.g. `{color.blue.500}`) to their actual values when 
 
 ## Screenshots
 
-A script at `sailwind-mock/scripts/screenshot.sh` captures PNG screenshots of all HTML files.
+A script at `scripts/screenshot.sh` within this skill's global install location captures PNG screenshots of all HTML files.
 
 - Screenshots are saved to a `screenshots/` folder at the project root
 - Filename matches the HTML file without the `.html` extension
 - Resolution: 1600×1000 at 2x (retina), resulting in 3200×2000px images
 - Hooks auto-run this script whenever files are created or edited in `html/`
 
-To run manually from the project root:
-```bash
-bash sailwind-mock/scripts/screenshot.sh
-```
+To run manually, locate `screenshot.sh` in the global skills directory where this skill is installed and run it from the project root. Do not copy the script into the project.
 
 Requires `uv` to be installed (`brew install uv` or https://docs.astral.sh/uv/getting-started/installation/).
