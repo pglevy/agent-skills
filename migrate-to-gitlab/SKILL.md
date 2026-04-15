@@ -27,15 +27,15 @@ glab auth login --hostname <gitlab-host>
 Use the `<namespace>/<repo-name>` path syntax with `GITLAB_HOST` env var. The `--skipGitInit` flag is required — without it, glab interactively prompts whether to create a local folder, blocking the command from completing.
 
 ```bash
-GITLAB_HOST=<gitlab-host> glab repo create <namespace>/<repo-name> --private --skipGitInit
+GITLAB_HOST=<gitlab-host> glab repo create <namespace>/<repo-name> --internal --skipGitInit
 ```
 
 Example:
 ```bash
-GITLAB_HOST=gitlab.example.com glab repo create your-username/your-repo --private --skipGitInit
+GITLAB_HOST=gitlab.example.com glab repo create your-username/your-repo --internal --skipGitInit
 ```
 
-Visibility flags: `--private`, `--public`, or `--internal`.
+Visibility flags: `--private` or `--internal`.
 
 ## Update Remote Origin
 
