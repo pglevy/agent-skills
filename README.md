@@ -10,6 +10,7 @@ My collection of borrowed and homegrown agent skills
 - **[sailwind-mock](./sailwind-mock):** Generate UI mockups as standalone HTML pages using the Sailwind design token system
 - **[skill-creator](./skill-creator):** Guide for creating effective skills (Source: [Anthropic](https://github.com/anthropics/skills/tree/main/skills/skill-creator))
 - **[spec-driven-dev](./spec-driven-dev):** Guide for spec-based agent-driven development similar to Kiro, but for use with other agents
+- **[token-policy-standard](./token-policy-standard):** Audit a frontend codebase for design token discrepancies against Sailwind tokens, generate a TPS report, apply fixes, and optionally open a merge request
 - **[vignette](./vignette):** Create animated product vignettes — short, cinematic HTML demos that showcase a product feature or workflow
 
 ## License
