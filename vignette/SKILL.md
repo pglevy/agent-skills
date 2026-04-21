@@ -173,7 +173,7 @@ single source of truth — do not hardcode colors, fonts, spacing, or gradients.
 Fetch the DTCG tokens file at the start of every vignette build:
 
 ```
-https://cdn.jsdelivr.net/gh/pglevy/sailwind@v0.8.0/public/tokens.json
+https://cdn.jsdelivr.net/gh/pglevy/sailwind@latest/public/tokens.json
 ```
 
 If the fetch fails, fall back to a local copy at `node_modules/@pglevy/sailwind/dist/tokens.json`
