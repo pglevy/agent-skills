@@ -15,7 +15,7 @@ The user will provide one or both of:
 
 ## Workflow
 
-1. Read the design tokens from the live source: https://cdn.jsdelivr.net/gh/pglevy/sailwind@v0.8.0/public/tokens.json
+1. Read the design tokens from the live source: https://cdn.jsdelivr.net/gh/pglevy/sailwind@main/public/tokens.json
    - Fetch this URL at the start of every generation to get the current token values
    - Do NOT copy or embed the token file — always reference it live
 
