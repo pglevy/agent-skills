@@ -25,7 +25,9 @@ The user will provide one or both of:
 
 4. Save files into an `html/` subfolder within the current working directory (or wherever the user specifies).
 
-5. After all HTML files are saved, run the screenshot script to sync the `screenshots/` folder. The script is located at `scripts/screenshot.sh` within the global skills directory where this skill is installed. Locate and run it from there — do not copy it into the project.
+5. After all HTML files are saved, run the icon validation script to check for invalid Font Awesome icon references. The script is located at `scripts/validate-icons.sh` within the global skills directory where this skill is installed. Run it from the project root. If any invalid icons are found, fix them in the HTML files before proceeding — replace with valid free alternatives suggested by the script, or choose a different icon from the free set.
+
+6. After all icons are validated, run the screenshot script to sync the `screenshots/` folder. The script is located at `scripts/screenshot.sh` within the global skills directory where this skill is installed. Locate and run it from there — do not copy it into the project.
 
 ## HTML Generation Rules
 
@@ -56,6 +58,17 @@ Resolve all token aliases (e.g. `{color.blue.500}`) to their actual values when 
 - One `.html` file per screen/page
 - Files placed in `html/` subfolder
 - Pages should be visually coherent as a set
+
+## Icon Validation
+
+A script at `scripts/validate-icons.sh` within this skill's global install location checks all HTML files for Font Awesome icon classes that don't exist in the free CDN CSS.
+
+- Fetches the FA 7.0.1 free CSS and extracts valid icon names
+- Scans all `fa-*` classes in HTML files (ignoring style prefixes and utility classes)
+- Reports invalid icons with suggested alternatives when available
+- Exits with code 1 if any invalid icons are found
+
+Many icons that AI agents "guess" are actually Font Awesome Pro icons not available in the free tier. Always run this validation before presenting mockups.
 
 ## Screenshots
 
