@@ -1,0 +1,22 @@
+{
+  "sources": {
+    "frontend-design": {
+      "host": "github",
+      "repo": "anthropics/skills",
+      "path": "skills/frontend-design",
+      "branch": "main"
+    },
+    "skill-creator": {
+      "host": "github",
+      "repo": "anthropics/skills",
+      "path": "skills/skill-creator",
+      "branch": "main"
+    },
+    "create-mcp-app": {
+      "host": "github",
+      "repo": "modelcontextprotocol/ext-apps",
+      "path": "plugins/mcp-apps/skills/create-mcp-app",
+      "branch": "main"
+    }
+  }
+}
