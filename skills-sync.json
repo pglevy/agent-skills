@@ -45,6 +45,20 @@
       "repo": "docs/ux-manual",
       "path": "skills/tool-audit",
       "branch": "main"
+    },
+    "usability-testing": {
+      "host": "gitlab",
+      "gitlabHost": "gitlab.appian-stratus.com",
+      "repo": "docs/ux-manual",
+      "path": "skills/usability-testing",
+      "branch": "main"
+    },
+    "vignette": {
+      "host": "gitlab",
+      "gitlabHost": "gitlab.appian-stratus.com",
+      "repo": "docs/ux-manual",
+      "path": "skills/vignette",
+      "branch": "main"
     }
   }
 }

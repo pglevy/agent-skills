@@ -6,12 +6,18 @@ description: >
   build a vignette, product theater animation, animated demo, product walkthrough,
   cinematic UI demo, or GSAP-based product showcase. Also use when asked to animate
   a UI scene, create a camera-driven demo, or build a beat-scripted animation sequence.
+metadata:
+  title: Vignette
+  prompt: "Give me the brief template to create a new vignette: "
+  tags:
+    - Define
+  human-reviewer: Philip Levy
+  last-reviewed: 2026-05-22 
 ---
 
 # Vignette Skill
 
-Build self-contained, single-file HTML vignettes that tell a visual story about a product
-feature using GSAP-powered camera moves, typing effects, and UI state transitions.
+Build self-contained, single-file HTML vignettes that tell a visual story about a product feature using GSAP-powered camera moves, typing effects, and UI state transitions.
 
 ## What a Vignette Is
 
@@ -80,7 +86,7 @@ Build the static HTML/CSS scene first. The scene should look like a realistic pr
 Key principles:
 - Use Sailwind design tokens for all colors, fonts, spacing (see Design Reference section below)
 - Define only the color families actually needed as CSS custom properties
-- Use Open Sans for UI text, Geist Mono for code
+- Use Geist Mono for code or monospace applications unless something else is specified
 - The Appian header gradient is a signature element — include it when showing Appian-like UIs
 - Scene dimensions should be larger than viewport to allow camera movement
 - Use CSS Grid for panel layout with named grid areas
@@ -176,8 +182,10 @@ Fetch the DTCG tokens file at the start of every vignette build:
 https://cdn.jsdelivr.net/gh/pglevy/sailwind@latest/public/tokens.json
 ```
 
-If the fetch fails, fall back to a local copy at `node_modules/@pglevy/sailwind/dist/tokens.json`
-(install with `npm install --save-dev @pglevy/sailwind` if needed).
+If the CDN fetch fails, fall back to downloading the raw tokens file from GitHub:
+```
+https://raw.githubusercontent.com/pglevy/sailwind/refs/heads/main/public/tokens.json
+```
 
 ### Token Usage
 Resolve all token aliases (e.g. `{color.blue.500}`) to their actual values when writing CSS. Base all design decisions on what you find in the fetched file — do not guess or infer token values.
@@ -185,7 +193,7 @@ Resolve all token aliases (e.g. `{color.blue.500}`) to their actual values when 
 ## Technical Notes
 
 - Load GSAP from CDN: `https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js`
-- Load Google Fonts for Open Sans and Geist Mono
+- Load Google Fonts for Open Sans and Geist Mono, or others if needed
 - Set initial camera state with `gsap.set()` before first paint to avoid flash
 - Use `setTimeout(run, 400)` after window load to start the sequence
 - All animations use Promises so beats can be sequenced with `await`

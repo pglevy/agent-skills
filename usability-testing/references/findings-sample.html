@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usability Findings: Package Deployment Flow</title>
+  <style>
+    :root {
+      /* Sailwind token values */
+      --bg: #FAFAFA;
+      --surface: #ffffff;
+      --surface-alt: #F5F5F5;
+      --border: #E0E0E0;
+      --text: #212121;
+      --text-muted: #757575;
+      --accent: #2322F0;
+      --accent-light: #E9E9FE;
+      --warn: #E6AE06;
+      --warn-light: #FFF9E6;
+      --success: #4CAF50;
+      --success-light: #EDF7EE;
+      --fail: #DE0037;
+      --fail-light: #FCE6EB;
+      --tag-bg: #EEEEEE;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Open Sans", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    .report-header {
+      background: linear-gradient(to right, #2322F0 0%, #E21496 57%, #FFC107 83%, #FFD948 100%);
+      position: relative;
+      padding: 2rem 2rem 2rem;
+    }
+
+    .report-header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 40%, rgba(255,255,255,0.95) 75%);
+    }
+
+    .report-header > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .report-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .meta-chip {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(35, 34, 240, 0.08);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      color: var(--accent);
+    }
+
+    .report-header h1 {
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .report-header .subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Layout ── */
+    .report-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 2rem;
+    }
+
+    section {
+      margin-bottom: 2rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.3px;
+    }
+
+    /* ── Summary card ── */
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+    }
+
+    .summary-card p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+
+    .summary-card p:last-child { margin-bottom: 0; }
+
+    /* ── Stat row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 400;
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* ── Objectives ── */
+    .objectives-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .objective-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 1rem;
+    }
+
+    .objective-card .obj-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .objective-card p { font-size: 0.875rem; line-height: 1.6; }
+
+    .objective-card.met { border-left: 3px solid #4CAF50; }
+    .objective-card.partial { border-left: 3px solid #E6AE06; }
+    .objective-card.unmet { border-left: 3px solid #DE0037; }
+
+    .met-badge, .partial-badge, .unmet-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .met-badge { background: var(--success-light); color: var(--success); }
+    .partial-badge { background: var(--warn-light); color: #212121; }
+    .unmet-badge { background: var(--fail-light); color: var(--fail); }
+
+    /* ── Quotes ── */
+    .quotes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .quote-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .quote-card blockquote {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: var(--text);
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .quote-card blockquote::before {
+      content: "\201C";
+      font-size: 1.75rem;
+      color: var(--border);
+      font-style: normal;
+      line-height: 0;
+      vertical-align: -8px;
+      margin-right: 3px;
+    }
+
+    .quote-attribution {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .quote-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: var(--tag-bg);
+      color: var(--text-muted);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      margin-top: 0.25rem;
+      font-weight: 400;
+    }
+
+    /* ── Findings table ── */
+    .findings-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .findings-table th {
+      background: var(--surface-alt);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      text-align: left;
+    }
+
+    .findings-table td {
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem;
+      vertical-align: top;
+    }
+
+    .finding-count {
+      white-space: nowrap;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .finding-count.high { color: var(--fail); }
+    .finding-count.mid { color: var(--warn); }
+    .finding-count.low { color: var(--text-muted); }
+
+    .severity-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.25rem;
+      vertical-align: middle;
+    }
+    .severity-dot.high { background: #DE0037; }
+    .severity-dot.mid  { background: #E6AE06; }
+    .severity-dot.low  { background: #9E9E9E; }
+
+    /* ── Noteworthy ── */
+    .noteworthy-card {
+      background: var(--warn-light);
+      border: 1px solid #FFECB5;
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .noteworthy-icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
+    .noteworthy-card p { font-size: 0.875rem; line-height: 1.7; }
+    .noteworthy-card p + p { margin-top: 0.5rem; }
+
+    /* ── Common findings categories ── */
+    .finding-category {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .finding-category-header {
+      background: var(--surface-alt);
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .finding-category-header h3 {
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+
+    .finding-category ul {
+      padding: 1rem 1rem 1rem 2rem;
+    }
+
+    .finding-category li {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .finding-category li:last-child { margin-bottom: 0; }
+
+    .participant-tag {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      margin-left: 0.25rem;
+      vertical-align: middle;
+    }
+
+    /* ── Action items ── */
+    .action-items {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .action-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+
+    .action-item:last-child { border-bottom: none; }
+
+    .action-priority {
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      margin-top: 2px;
+    }
+
+    .priority-now { background: var(--fail-light); color: var(--fail); }
+    .priority-soon { background: var(--warn-light); color: #212121; }
+    .priority-later { background: var(--tag-bg); color: var(--text-muted); }
+
+    .action-text { font-size: 0.875rem; line-height: 1.6; }
+    .action-text strong { display: block; margin-bottom: 0.25rem; }
+    .action-source { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    /* ── Task completion ── */
+    .task-results {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .task-result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1rem;
+    }
+
+    .task-result-card h4 {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .task-result-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+    }
+
+    .completion-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 0.25rem;
+      overflow: hidden;
+      margin-bottom: 0.25rem;
+    }
+
+    .completion-fill {
+      height: 100%;
+      border-radius: 0.25rem;
+    }
+
+    .fill-high { background: #4CAF50; }
+    .fill-mid  { background: #E6AE06; }
+    .fill-low  { background: #DE0037; }
+
+    .completion-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* ── Participants table ── */
+    .participants-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .participants-table th {
+      background: var(--surface-alt);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      text-align: left;
+    }
+
+    .participants-table td {
+      padding: 0.5rem 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem;
+      text-align: left;
+    }
+
+    .participants-table td.task-icon {
+      text-align: center;
+    }
+
+    .task-icon { font-size: 0.875rem; }
+
+    @media (max-width: 700px) {
+      .report-header { padding: 1.5rem 1rem; }
+      .report-body { padding: 1.5rem 1rem 2rem; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .objectives-grid { grid-template-columns: 1fr; }
+      .quotes-grid { grid-template-columns: 1fr; }
+      .task-results { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="report-header">
+    <div class="report-meta">
+      <span class="meta-chip">Developer Tools</span>
+      <span class="meta-chip">Usability Study</span>
+      <span class="meta-chip">May 2026</span>
+    </div>
+    <h1>Package Deployment Flow</h1>
+    <p class="subtitle">5 participants · 45-minute sessions · Prototype fidelity: mid-fi</p>
+  </div>
+
+  <div class="report-body">
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Participants</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Tasks tested</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color: #E6AE06;">60%</div>
+        <div class="stat-label">Task 1 completion</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color: #DE0037;">1</div>
+        <div class="stat-label">Task 3 completions</div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <section>
+      <div class="section-label">Summary</div>
+      <div class="summary-card">
+        <p>Participants understood the concept of adding and updating packages, but consistently struggled to <em>initiate</em> the flow — the entry point was too buried for first-time discovery. Once inside the deployment dialog, the language mismatch between internal version names and familiar semantic versioning caused significant hesitation.</p>
+        <p>The test largely confirmed our hypothesis that the confirmation step needs a dependency impact view before commit. All five participants paused and asked what downstream effects to expect before proceeding. The rollback path was not discovered by any participant unprompted.</p>
+      </div>
+    </section>
+
+    <!-- Objectives -->
+    <section>
+      <div class="section-label">Objectives</div>
+      <div class="objectives-grid">
+        <div class="objective-card partial">
+          <span class="partial-badge">Partially met</span>
+          <div class="obj-label">Objective 1</div>
+          <p>Can developers find and initiate the package deployment flow without guidance?</p>
+        </div>
+        <div class="objective-card unmet">
+          <span class="unmet-badge">Not met</span>
+          <div class="obj-label">Objective 2</div>
+          <p>Do developers understand what will change in their environment before confirming deployment?</p>
+        </div>
+        <div class="objective-card met">
+          <span class="met-badge">Met</span>
+          <div class="obj-label">Objective 3</div>
+          <p>Can developers update an existing package to a new version without confusion?</p>
+        </div>
+        <div class="objective-card unmet">
+          <span class="unmet-badge">Not met</span>
+          <div class="obj-label">Objective 4</div>
+          <p>Is the rollback mechanism discoverable after a deployment?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task completion -->
+    <section>
+      <div class="section-label">Task Completion</div>
+      <div class="task-results">
+        <div class="task-result-card">
+          <h4>Task 1 — Add a new package</h4>
+          <p>Find and install the <em>payment-processing-v2</em> package to the current project environment.</p>
+          <div class="completion-bar"><div class="completion-fill fill-mid" style="width: 60%;"></div></div>
+          <div class="completion-label">3 / 5 completed</div>
+        </div>
+        <div class="task-result-card">
+          <h4>Task 2 — Update a package</h4>
+          <p>Update <em>auth-service</em> to the latest available version.</p>
+          <div class="completion-bar"><div class="completion-fill fill-high" style="width: 100%;"></div></div>
+          <div class="completion-label">5 / 5 completed</div>
+        </div>
+        <div class="task-result-card">
+          <h4>Task 3 — Resolve a conflict</h4>
+          <p>Resolve the detected conflict between <em>data-connector-v1</em> and <em>query-engine-v3</em>.</p>
+          <div class="completion-bar"><div class="completion-fill fill-low" style="width: 20%;"></div></div>
+          <div class="completion-label">1 / 5 completed</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Noteworthy -->
+    <section>
+      <div class="section-label">Noteworthy</div>
+      <div class="noteworthy-card">
+        <div class="noteworthy-icon">⚠️</div>
+        <div>
+          <p>One participant (Marcus) spent 4 minutes attempting to add a package by editing a config file directly in the code editor — never opening the Package Manager UI at all. He explained: "This is just how I'd do it in any other project."</p>
+          <p>This surfaces a likely population of developers who will bypass the UI entirely if the entry point isn't clearly surfaced at the project level. Worth noting for onboarding and discoverability strategy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Quotes -->
+    <section>
+      <div class="section-label">Key Quotes</div>
+      <div class="quotes-grid">
+        <div class="quote-card">
+          <blockquote>I kept looking for an "install" button… "deploy" means something totally different to me. I deploy code. I install packages.</blockquote>
+          <div class="quote-attribution">— Marcus, Senior Developer</div>
+          <span class="quote-tag">Terminology</span>
+        </div>
+        <div class="quote-card">
+          <blockquote>I want to see what would break before I commit to this. Can I get a dry run? Even npm does a dry run.</blockquote>
+          <div class="quote-attribution">— Sarah, Full-Stack Engineer</div>
+          <span class="quote-tag">Confirmation UX</span>
+        </div>
+        <div class="quote-card">
+          <blockquote>Where's the equivalent of a package.json? I want to see everything that's installed in one place before I start changing things.</blockquote>
+          <div class="quote-attribution">— David, Platform Engineer</div>
+          <span class="quote-tag">Mental model</span>
+        </div>
+        <div class="quote-card">
+          <blockquote>Oh — once I clicked it I totally knew what to do. Getting to it was the hard part. After that it felt pretty natural.</blockquote>
+          <div class="quote-attribution">— Priya, DevOps Engineer</div>
+          <span class="quote-tag">Learnability</span>
+        </div>
+        <div class="quote-card">
+          <blockquote>I'd never know a conflict was resolved if there wasn't a success state. The page just... looked the same.</blockquote>
+          <div class="quote-attribution">— Jordan, Backend Developer</div>
+          <span class="quote-tag">Feedback &amp; status</span>
+        </div>
+        <div class="quote-card">
+          <blockquote>I actually really liked the version timeline. I just wish it showed what changed between versions, not just that they exist.</blockquote>
+          <div class="quote-attribution">— Priya, DevOps Engineer</div>
+          <span class="quote-tag">Version picker</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Findings -->
+    <section>
+      <div class="section-label">Common Findings</div>
+
+      <div class="finding-category">
+        <div class="finding-category-header">
+          <span class="severity-dot high"></span>
+          <h3>Common Failings</h3>
+        </div>
+        <ul>
+          <li><strong>Entry point not discoverable (Task 1).</strong> 4 of 5 participants did not find "Package Manager" on first pass — they looked in Settings, the sidebar, and the project config file before locating it. Three required a hint. The trigger was consistently labeled "unexpected."</li>
+          <li><strong>Conflict resolution flow too opaque (Task 3).</strong> 4 of 5 participants could not complete Task 3. The conflict indicator appeared only in a secondary status bar area that most participants never noticed. Once seen, the path to resolution wasn't clear — no call-to-action linked the warning to the resolution UI.</li>
+          <li><strong>No perceived success state after deployment.</strong> 3 of 5 participants were unsure whether their action had completed. They clicked "Deploy" and were returned to the same screen with no visible change.</li>
+        </ul>
+      </div>
+
+      <div class="finding-category">
+        <div class="finding-category-header">
+          <span class="severity-dot mid"></span>
+          <h3>Common Confusion</h3>
+        </div>
+        <ul>
+          <li><strong>"Deploy" vs. "Install" terminology.</strong> All 5 participants hesitated at the "Deploy Package" label. Developers with npm/pip/brew backgrounds associated "deploy" with releasing code, not adding a dependency. <span class="participant-tag">All 5</span></li>
+          <li><strong>Internal version names instead of semver.</strong> 4 participants expected semantic version numbers (e.g., <code>2.4.1</code>) but saw internal build identifiers (e.g., <code>auth-svc.2026.05.a</code>). Two tried to sort by version number before understanding the format. <span class="participant-tag">4 of 5</span></li>
+          <li><strong>Confirmation step lacks context.</strong> All participants paused at the confirmation modal and asked (aloud or to the moderator) what downstream effects to expect — which packages would be affected, whether anything would break. <span class="participant-tag">All 5</span></li>
+        </ul>
+      </div>
+
+      <div class="finding-category">
+        <div class="finding-category-header">
+          <span class="severity-dot low"></span>
+          <h3>Common Feedback</h3>
+        </div>
+        <ul>
+          <li>All participants responded positively to the version timeline component once they understood it. "I like seeing the history" came up in 4 recap sessions. <span class="participant-tag">4 of 5</span></li>
+          <li>3 participants expected a search bar in the package catalog. Two tried pressing Cmd+F. <span class="participant-tag">3 of 5</span></li>
+          <li>2 participants mentioned wanting to see a dependency graph or impact analysis before confirming. Both had ops backgrounds. <span class="participant-tag">2 of 5</span></li>
+          <li>2 participants tried using keyboard shortcuts common in IDEs (Cmd+Shift+P, Cmd+K) to navigate. Neither expected to find Package Manager that way but noted they'd try it. <span class="participant-tag">2 of 5</span></li>
+          <li>All participants appreciated the ability to pin a specific version rather than always being on latest. <span class="participant-tag">All 5</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Action Items -->
+    <section>
+      <div class="section-label">Action Items / Next Steps</div>
+      <div class="action-items">
+
+        <div class="action-item">
+          <span class="action-priority priority-now">Now</span>
+          <div class="action-text">
+            <strong>Rename "Deploy Package" → "Add Package" (or "Install Package")</strong>
+            Align terminology with developer mental models from npm/pip/brew ecosystems. Validate the new label with 2–3 developers before shipping.
+            <div class="action-source">Source: All 5 participants hesitated at "Deploy" label</div>
+          </div>
+        </div>
+
+        <div class="action-item">
+          <span class="action-priority priority-now">Now</span>
+          <div class="action-text">
+            <strong>Surface conflict indicators more prominently</strong>
+            Move conflict state out of the status bar and into the main package list. Add a clear call-to-action that links directly to resolution steps.
+            <div class="action-source">Source: Task 3 — 4 of 5 failed to notice or resolve conflict</div>
+          </div>
+        </div>
+
+        <div class="action-item">
+          <span class="action-priority priority-now">Now</span>
+          <div class="action-text">
+            <strong>Add a success state after deployment</strong>
+            Show a visible confirmation (toast, status update, or inline badge) after a package is installed or updated. The current flow returns to the same screen silently.
+            <div class="action-source">Source: 3 participants unsure if deployment completed</div>
+          </div>
+        </div>
+
+        <div class="action-item">
+          <span class="action-priority priority-soon">Soon</span>
+          <div class="action-text">
+            <strong>Show semver-equivalent version labels alongside internal identifiers</strong>
+            Display friendly version numbers (e.g., <code>2.4.1</code>) paired with build identifiers, or map them so developers can orient to familiar conventions.
+            <div class="action-source">Source: 4 participants couldn't parse internal version format</div>
+          </div>
+        </div>
+
+        <div class="action-item">
+          <span class="action-priority priority-soon">Soon</span>
+          <div class="action-text">
+            <strong>Add dependency impact summary to the confirmation step</strong>
+            Before the user confirms a deployment, show which other packages will be affected. Even a simple list ("3 packages will be updated") reduces uncertainty significantly.
+            <div class="action-source">Source: All 5 paused at confirmation and asked about downstream effects</div>
+          </div>
+        </div>
+
+        <div class="action-item">
+          <span class="action-priority priority-soon">Soon</span>
+          <div class="action-text">
+            <strong>Improve Package Manager entry point discoverability</strong>
+            Consider adding a project-level shortcut, a command palette entry, or a contextual link from the code editor. Current placement requires prior knowledge to find.
+            <div class="action-source">Source: Task 1 — 4 of 5 failed first-pass discovery</div>
+          </div>
+        </div>
+
+        <div class="action-item">
+          <span class="action-priority priority-later">Later</span>
+          <div class="action-text">
+            <strong>Add search to the package catalog</strong>
+            Low-effort, high-expected feature. Three participants reached for Cmd+F.
+            <div class="action-source">Source: 3 participants tried to search without finding a search bar</div>
+          </div>
+        </div>
+
+        <div class="action-item">
+          <span class="action-priority priority-later">Later</span>
+          <div class="action-text">
+            <strong>Investigate rollback discoverability</strong>
+            Zero participants found the rollback path unprompted. Worth a dedicated follow-up study or a targeted design iteration before this feature ships.
+            <div class="action-source">Source: Rollback — 0 of 5 discovered unprompted</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Participants -->
+    <section>
+      <div class="section-label">Participants</div>
+      <table class="participants-table">
+        <thead>
+          <tr>
+            <th>Participant</th>
+            <th>Role</th>
+            <th>Familiarity w/ product</th>
+            <th>Task 1</th>
+            <th>Task 2</th>
+            <th>Task 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Marcus</strong></td>
+            <td>Senior Developer</td>
+            <td>Moderate</td>
+            <td class="task-icon">❌</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">❌</td>
+          </tr>
+          <tr>
+            <td><strong>Sarah</strong></td>
+            <td>Full-Stack Engineer</td>
+            <td>New</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">❌</td>
+          </tr>
+          <tr>
+            <td><strong>David</strong></td>
+            <td>Platform Engineer</td>
+            <td>Moderate</td>
+            <td class="task-icon">❌</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">✅</td>
+          </tr>
+          <tr>
+            <td><strong>Priya</strong></td>
+            <td>DevOps Engineer</td>
+            <td>Experienced</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">❌</td>
+          </tr>
+          <tr>
+            <td><strong>Jordan</strong></td>
+            <td>Backend Developer</td>
+            <td>New</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">✅</td>
+            <td class="task-icon">❌</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+</body>
+</html>
