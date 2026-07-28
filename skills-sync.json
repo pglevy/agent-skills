@@ -17,6 +17,13 @@
       "repo": "modelcontextprotocol/ext-apps",
       "path": "plugins/mcp-apps/skills/create-mcp-app",
       "branch": "main"
+    },
+    "style-audit": {
+      "host": "gitlab",
+      "gitlabHost": "gitlab.appian-stratus.com",
+      "repo": "docs/ux-manual",
+      "path": "skills/style-audit",
+      "branch": "main"
     }
   }
 }
