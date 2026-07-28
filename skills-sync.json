@@ -24,6 +24,13 @@
       "repo": "docs/ux-manual",
       "path": "skills/style-audit",
       "branch": "main"
+    },
+    "migrate-to-gitlab": {
+      "host": "gitlab",
+      "gitlabHost": "gitlab.appian-stratus.com",
+      "repo": "docs/ux-manual",
+      "path": "skills/migrate-to-gitlab",
+      "branch": "main"
     }
   }
 }
