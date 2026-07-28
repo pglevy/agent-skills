@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grouped Selector Icons</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+<body>
+  <section>
+    <!-- Icons that appear first in comma-grouped CSS selectors -->
+    <!-- e.g. .fa-user,.fa-user-alt,.fa-user-large{--fa:...} -->
+    <i class="fa-solid fa-user"></i>
+    <i class="fa-solid fa-house-chimney-crack"></i>
+    <i class="fa-solid fa-arrow-right"></i>
+    <i class="fa-solid fa-circle-xmark"></i>
+
+    <!-- Aliases (second/third in groups) should also be valid -->
+    <i class="fa-solid fa-user-alt"></i>
+    <i class="fa-solid fa-house-damage"></i>
+
+    <!-- Modifiers mixed in — should be ignored -->
+    <i class="fa-solid fa-spinner fa-spin fa-lg"></i>
+  </section>
+</body>
+</html>

@@ -1,11 +1,32 @@
 ---
-name: sailwind-mock
+name: quick-mockup
 description: Generate UI mockups as standalone HTML pages using the Sailwind design token system. Use this skill when asked to create mockups, prototypes, or HTML previews for an app or feature — given a text description (app spec, PRD, feature brief) and/or a reference screenshot/image. Produces coherent multi-page HTML mockups styled exclusively from the Sailwind design tokens (colors, typography, spacing, gradients). Do NOT use the frontend-design skill for these tasks.
+metadata:
+  title: Quick Mockup
+  prompt: "Use the quick-mockup skill to mock this up: "
+  tags:
+    - Define
+  human-reviewer: Philip Levy
+  last-reviewed: 2026-05-22
 ---
 
-# Sailwind Mock
+# Quick Mockup
 
 Generate standalone HTML mockup pages for an app using the Sailwind design token system.
+
+## UX Content Standards
+
+When generating any UI copy (buttons, labels, dialog titles, error messages, tooltips, placeholders, confirmation messages), apply the rules from the `ux-content-standards` skill. The most common rules to internalize:
+
+- **Buttons**: ALL CAPS, specific action verb, no punctuation
+- **Dialog titles**: "Verb Noun" Title Case
+- **Labels / headings / tabs**: Title Case
+- **Everything else** (instructions, tooltips, options, placeholders): sentence case
+- **No "please"**, no "invalid", no user blame in errors — use "we" framing
+
+If the `ux-content-standards` skill is available in your context, read it for the full rule set. Apply the rules passively during generation — don't run a separate content audit pass after every iteration.
+
+---
 
 ## Inputs
 
@@ -28,6 +49,8 @@ The user will provide one or both of:
 5. After all HTML files are saved, run the icon validation script to check for invalid Font Awesome icon references. The script is located at `scripts/validate-icons.sh` within the global skills directory where this skill is installed. Run it from the project root. If any invalid icons are found, fix them in the HTML files before proceeding — replace with valid free alternatives suggested by the script, or choose a different icon from the free set.
 
 6. After all icons are validated, run the screenshot script to sync the `screenshots/` folder. The script is located at `scripts/screenshot.sh` within the global skills directory where this skill is installed. Locate and run it from there — do not copy it into the project.
+
+7. Offer to start a local web server from the `html/` directory. Use the `serve.sh` script located at `scripts/serve.sh` within the global skills directory where this skill is installed. It automatically finds an available port (starting at 8000) so it won't conflict with other running servers. Report the URL it prints back to the user.
 
 ## HTML Generation Rules
 
@@ -77,8 +100,6 @@ A script at `scripts/screenshot.sh` within this skill's global install location 
 - Screenshots are saved to a `screenshots/` folder at the project root
 - Filename matches the HTML file without the `.html` extension
 - Resolution: 1600×1000 at 2x (retina), resulting in 3200×2000px images
-- Hooks auto-run this script whenever files are created or edited in `html/`
-
 To run manually, locate `screenshot.sh` in the global skills directory where this skill is installed and run it from the project root. Do not copy the script into the project.
 
 Requires `uv` to be installed (`brew install uv` or https://docs.astral.sh/uv/getting-started/installation/).

@@ -1,0 +1,54 @@
+{
+  "skill_name": "quick-mockup",
+  "focus": "icon-validation",
+  "evals": [
+    {
+      "id": 1,
+      "name": "all-valid-no-false-positives",
+      "prompt": "Run validate-icons.sh against a file containing only valid free FA icons and modifiers",
+      "expected_output": "Script exits 0 with 'All icons valid.' message — no false positives",
+      "files": ["evals/files/icons-all-valid.html"],
+      "expectations": [
+        "Script exits with code 0",
+        "Output contains 'All icons valid.'",
+        "No lines beginning with 'INVALID:' appear in the output",
+        "Script loads at least 2000 valid icons from the CDN"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "pro-icons-detected",
+      "prompt": "Run validate-icons.sh against a file with known pro-only and fictional icons mixed with free icons",
+      "expected_output": "Script exits 1, flags exactly 4 invalid icons (unicorn, galaxy, flux-capacitor, coffin), does not flag the valid ones",
+      "files": ["evals/files/icons-pro-mixed.html"],
+      "expectations": [
+        "Script exits with code 1",
+        "Output contains 'INVALID: fa-unicorn'",
+        "Output contains 'INVALID: fa-galaxy'",
+        "Output contains 'INVALID: fa-flux-capacitor'",
+        "Output contains 'INVALID: fa-coffin'",
+        "Output does NOT contain 'INVALID: fa-house'",
+        "Output does NOT contain 'INVALID: fa-folder'",
+        "Output does NOT contain 'INVALID: fa-circle-info'",
+        "Output does NOT contain 'INVALID: fa-linkedin'",
+        "Output reports exactly '4 invalid icon(s) found'"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "grouped-selector-icons-pass",
+      "prompt": "Run validate-icons.sh against a file using icons that appear in comma-grouped CSS selectors (the previous bug scenario)",
+      "expected_output": "Script exits 0 — fa-user, fa-house-chimney-crack, fa-user-alt, fa-house-damage all recognized as valid",
+      "files": ["evals/files/icons-grouped-selectors.html"],
+      "expectations": [
+        "Script exits with code 0",
+        "Output contains 'All icons valid.'",
+        "fa-user is NOT flagged as invalid",
+        "fa-house-chimney-crack is NOT flagged as invalid",
+        "fa-user-alt is NOT flagged as invalid",
+        "fa-house-damage is NOT flagged as invalid",
+        "Script loads at least 2000 valid icons (confirms grouped extraction works)"
+      ]
+    }
+  ]
+}

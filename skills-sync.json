@@ -31,6 +31,13 @@
       "repo": "docs/ux-manual",
       "path": "skills/migrate-to-gitlab",
       "branch": "main"
+    },
+    "quick-mockup": {
+      "host": "gitlab",
+      "gitlabHost": "gitlab.appian-stratus.com",
+      "repo": "docs/ux-manual",
+      "path": "skills/quick-mockup",
+      "branch": "main"
     }
   }
 }
