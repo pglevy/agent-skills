@@ -1,0 +1,353 @@
+{
+  "skill_name": "ux-content-standards",
+  "description": "Static HTML audit evals. Each test case provides a short HTML snippet with intentional content standards violations. The task is to audit the snippet, identify all violations, and output corrected text. Assertions verify that specific violations are flagged and specific corrections are produced. Tests run against: (1) the current SKILL.md, and (2) the source steering file content, to compare which version catches more violations.",
+  "eval_format": "audit",
+  "prompt_template": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n{html}",
+  "evals": [
+    {
+      "id": 1,
+      "name": "TC-UX-HTML-001",
+      "scenario": "Progress Wizard & Standard Input Form \u2014 Structural Form Constraints & Casing Rules",
+      "html": "<div class=\"wizard-header\">\n  <span class=\"milestone-step\">1. Setting up your profile</span>\n  <span class=\"milestone-step\">2. Confirming details</span>\n</div>\n\n<form class=\"appian-form\">\n  <h2 class=\"section-title\">Enter Account Details.</h2>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">Please Enter Email Address:</label>\n    <input type=\"text\" class=\"form-input\" placeholder=\"Search for accounts...\" />\n    <span class=\"field-instruction\">Enter your email. We will send a confirmation code to you.</span>\n  </div>\n\n  <div class=\"form-actions\">\n    <button type=\"submit\" class=\"btn-primary\">Next Step</button>\n  </div>\n</form>",
+      "planted_violations": [
+        "Milestones use numbering and progressive tense ('Setting up your profile', 'Confirming details') instead of short Verb Noun Title Case",
+        "Section title 'Enter Account Details.' has a trailing period \u2014 headings must be Title Case with no punctuation",
+        "Field label contains 'Please' and a colon \u2014 both forbidden",
+        "Placeholder 'Search for accounts...' contains an ellipsis \u2014 forbidden in placeholder text",
+        "Field instruction 'We will send a confirmation code to you.' is a single sentence but ends with a period \u2014 single-sentence strings omit the period; also missing contraction ('We will' \u2192 'We'll') and redundant 'to you'",
+        "Button 'Next Step' is not ALL CAPS and should use the standard navigation label NEXT"
+      ],
+      "expected_output": "Audit identifying all 6 violations with corrections: milestones \u2192 'Set Up Profile' / 'Confirm Details'; section title \u2192 'Enter Account Details' (no period); label \u2192 'Email Address' (no 'Please', no colon); placeholder \u2192 'Search accounts' (no ellipsis); instruction \u2192 'Enter your email. We'll send a confirmation code.' (no trailing period on single sentence, contraction added); button \u2192 NEXT",
+      "assertions": [
+        {
+          "id": "1.1",
+          "text": "Flags placeholder 'Search for accounts...' for containing an ellipsis, which is forbidden in placeholder text",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the placeholder 'Search for accounts...' as a violation? Does it specifically mention that ellipses are forbidden in placeholder text? Pass only if both conditions are met."
+        },
+        {
+          "id": "1.2",
+          "text": "Flags 'Please Enter Email Address:' for both the banned word 'please' and the forbidden colon/punctuation in a label",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the label 'Please Enter Email Address:'? Does it cite the ban on the word 'please'? Does it also cite the rule against punctuation in labels (the colon)? Pass only if both violations are identified."
+        },
+        {
+          "id": "1.3",
+          "text": "Corrects wizard milestones to short Verb Noun Title Case strings (e.g., 'Set Up Profile' and 'Confirm Details' or equivalent)",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it propose corrected milestone labels? Are the corrections in Title Case, free of numbering, free of progressive tense (-ing), and short Verb Noun phrases? Examples of acceptable corrections: 'Set Up Profile' / 'Confirm Details', 'Configure Profile' / 'Review Details'. Pass if the proposed corrections follow this pattern."
+        },
+        {
+          "id": "1.4",
+          "text": "Corrects button to NEXT (ALL CAPS, standard wizard navigation label)",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the button 'Next Step' as a violation? Does it propose the correction as 'NEXT' in ALL CAPS? Pass only if the correction is exactly NEXT (not 'Next', not 'NEXT STEP', not 'CONTINUE')."
+        }
+      ],
+      "prompt": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n<div class=\"wizard-header\">\n  <span class=\"milestone-step\">1. Setting up your profile</span>\n  <span class=\"milestone-step\">2. Confirming details</span>\n</div>\n\n<form class=\"appian-form\">\n  <h2 class=\"section-title\">Enter Account Details.</h2>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">Please Enter Email Address:</label>\n    <input type=\"text\" class=\"form-input\" placeholder=\"Search for accounts...\" />\n    <span class=\"field-instruction\">Enter your email. We will send a confirmation code to you.</span>\n  </div>\n\n  <div class=\"form-actions\">\n    <button type=\"submit\" class=\"btn-primary\">Next Step</button>\n  </div>\n</form>",
+      "expectations": [
+        "Flags placeholder 'Search for accounts...' for containing an ellipsis, which is forbidden in placeholder text",
+        "Flags 'Please Enter Email Address:' for both the banned word 'please' and the forbidden colon/punctuation in a label",
+        "Corrects wizard milestones to short Verb Noun Title Case strings (e.g., 'Set Up Profile' and 'Confirm Details' or equivalent)",
+        "Corrects button to NEXT (ALL CAPS, standard wizard navigation label)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "TC-UX-HTML-002",
+      "scenario": "Settings Grid & Support Workflows \u2014 Forbidden Words & Hidden Support Guardrails",
+      "html": "<div class=\"settings-card\">\n  <h3 class=\"grid-header\">System Administrator Configuration Panel</h3>\n  <p class=\"description\">Customize your global application parameters here.</p>\n\n  <div class=\"grid-row\">\n    <span class=\"row-label\">User Status</span>\n    <span class=\"badge badge-error\">Disabled</span>\n  </div>\n\n  <div class=\"grid-row\">\n    <span class=\"row-label\">Primary Gateway Web Address</span>\n    <input type=\"text\" class=\"form-input\" placeholder=\"All URLs\" />\n  </div>\n\n  <div class=\"grid-row\">\n    <span class=\"row-label\">Security Protocol</span>\n    <span class=\"help-icon\" title=\"Determines if she can view the audit logs. Please toggle this on to see them.\"></span>\n  </div>\n\n  <div class=\"banner-alert\">\n    If you encounter any issues, please contact Appian Support for immediate assistance.\n  </div>\n</div>",
+      "planted_violations": [
+        "Header uses 'System Administrator' \u2014 should be 'Admin'",
+        "Description is a single sentence ending with a period \u2014 single-sentence strings omit the period",
+        "Status badge uses 'Disabled' \u2014 forbidden word, should be 'Not available'",
+        "Row label uses 'Web Address' \u2014 forbidden phrase, should be 'URL'",
+        "Tooltip uses gendered pronoun 'she', contains 'Please', and doesn't follow the Boolean tooltip pattern",
+        "Banner exposes 'Appian Support' to end users \u2014 explicitly forbidden"
+      ],
+      "expected_output": "Audit identifying all 6 violations: header \u2192 'Admin Configuration Panel'; description \u2192 remove trailing period; badge \u2192 'Not available'; label \u2192 'Primary Gateway URL'; tooltip \u2192 'Determines if they can view the audit logs. Turn this on to view them.'; banner \u2192 rewrite without mentioning Appian Support",
+      "assertions": [
+        {
+          "id": "2.1",
+          "text": "Flags the banner for exposing 'Appian Support' to end users",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the banner alert text? Does it state that 'Appian Support' must not be mentioned to end users? Pass only if both conditions are met."
+        },
+        {
+          "id": "2.2",
+          "text": "Flags 'Disabled' and corrects it to 'Not available'",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the status badge value 'Disabled' as a forbidden word? Does it propose 'Not available' as the correction? Pass only if the correction is 'Not available' (not 'Unavailable', not 'Inactive')."
+        },
+        {
+          "id": "2.3",
+          "text": "Flags 'Administrator' in the header and corrects to 'Admin'",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag 'System Administrator' or 'Administrator' in the grid header as a violation? Does it propose 'Admin' as the replacement, resulting in something like 'Admin Configuration Panel'? Pass only if the correction uses 'Admin'."
+        },
+        {
+          "id": "2.4",
+          "text": "Corrects the tooltip to follow the Boolean tooltip pattern with 'they' replacing 'she', 'please' removed, and benefit-driven framing",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it correct the tooltip? Does the correction: (1) replace 'she' with 'they', (2) remove 'Please', and (3) follow the Boolean tooltip pattern 'Determines if {condition}. Turn this {on/off} to {benefit}.'? An acceptable correction: 'Determines if they can view the audit logs. Turn this on to view them.' Pass if all three criteria are met."
+        }
+      ],
+      "prompt": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n<div class=\"settings-card\">\n  <h3 class=\"grid-header\">System Administrator Configuration Panel</h3>\n  <p class=\"description\">Customize your global application parameters here.</p>\n\n  <div class=\"grid-row\">\n    <span class=\"row-label\">User Status</span>\n    <span class=\"badge badge-error\">Disabled</span>\n  </div>\n\n  <div class=\"grid-row\">\n    <span class=\"row-label\">Primary Gateway Web Address</span>\n    <input type=\"text\" class=\"form-input\" placeholder=\"All URLs\" />\n  </div>\n\n  <div class=\"grid-row\">\n    <span class=\"row-label\">Security Protocol</span>\n    <span class=\"help-icon\" title=\"Determines if she can view the audit logs. Please toggle this on to see them.\"></span>\n  </div>\n\n  <div class=\"banner-alert\">\n    If you encounter any issues, please contact Appian Support for immediate assistance.\n  </div>\n</div>",
+      "expectations": [
+        "Flags the banner for exposing 'Appian Support' to end users",
+        "Flags 'Disabled' and corrects it to 'Not available'",
+        "Flags 'Administrator' in the header and corrects to 'Admin'",
+        "Corrects the tooltip to follow the Boolean tooltip pattern with 'they' replacing 'she', 'please' removed, and benefit-driven framing"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "TC-UX-HTML-003",
+      "scenario": "Action Error Dialog \u2014 Validation Errors & Blaming Frameworks",
+      "html": "<div class=\"modal-dialog\">\n  <h2 class=\"dialog-title\">Error - Invalid Web Address Provided!</h2>\n\n  <div class=\"dialog-body\">\n    <p class=\"error-desc\">We have detected that your web address is completely invalid. Please check the spelling.</p>\n\n    <div class=\"form-field-error\">\n      <label class=\"field-label\">Integration Endpoint</label>\n      <input type=\"text\" class=\"input-error\" value=\"http://invalid-address\" />\n      <span class=\"inline-error\">THE URL SPECIFIED IS UNACCEPTABLE</span>\n    </div>\n  </div>\n\n  <div class=\"dialog-footer\">\n    <button class=\"btn-secondary\">Cancel and Exit</button>\n    <button class=\"btn-primary\">Try Again</button>\n  </div>\n</div>",
+      "planted_violations": [
+        "Dialog title uses 'Invalid', 'Web Address', and an exclamation mark; doesn't follow Verb Noun Title Case structure",
+        "Error description uses 'your', blames the user, contains 'invalid', 'web address', and 'Please'",
+        "Inline error 'THE URL SPECIFIED IS UNACCEPTABLE' is ALL CAPS \u2014 inline errors must be sentence case and bold",
+        "Button 'Cancel and Exit' should be CANCEL",
+        "Button 'Try Again' is not ALL CAPS and doesn't use a standard action verb"
+      ],
+      "expected_output": "Audit identifying all 5 violations: dialog title \u2192 'Verify Endpoint URL' or similar Verb Noun Title Case; description \u2192 rewrite without blame/invalid/please, e.g. 'Enter a valid URL to continue.'; inline error \u2192 sentence case bold, e.g. 'Enter a valid URL'; cancel button \u2192 CANCEL; action button \u2192 RETRY or similar ALL CAPS verb",
+      "assertions": [
+        {
+          "id": "3.1",
+          "text": "Flags inline error 'THE URL SPECIFIED IS UNACCEPTABLE' for ALL CAPS casing violation and corrects to sentence case bold",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the inline error 'THE URL SPECIFIED IS UNACCEPTABLE' as a casing violation? Does it state that inline errors must be sentence case (not ALL CAPS)? Does the proposed correction use sentence case? Pass only if all three are true."
+        },
+        {
+          "id": "3.2",
+          "text": "Corrects 'Cancel and Exit' to CANCEL",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag 'Cancel and Exit' as a violation? Does it propose 'CANCEL' as the correction (ALL CAPS, single word)? Pass only if the proposed correction is exactly CANCEL."
+        },
+        {
+          "id": "3.3",
+          "text": "Corrects dialog title to Verb Noun Title Case without banned words or punctuation",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the dialog title 'Error - Invalid Web Address Provided!'? Does the proposed correction: (1) follow Verb Noun Title Case structure, (2) not contain 'Error', 'Invalid', or 'Web Address', and (3) have no exclamation mark? An acceptable correction: 'Verify Endpoint URL', 'Check Connection URL', 'Update Endpoint Address'. Pass if all three criteria are met."
+        },
+        {
+          "id": "3.4a",
+          "text": "Explicitly identifies that the error description contains banned terms ('invalid', 'please', 'web address') and flags the user-blame framing ('your web address')",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the error description element? Does it explicitly call out at least two of these three violations: (1) the word 'invalid', (2) the word 'please', (3) the phrase 'web address'? Does it also note that 'your web address' or similar user-addressing language is blame-adjacent? Pass if at least two banned terms are named AND the blame/user-addressing framing is called out."
+        },
+        {
+          "id": "3.4b",
+          "text": "Rewrites the error description without 'invalid', 'please', 'web address', and without directly addressing 'you' as the cause",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does the proposed correction for the error description: (1) avoid the word 'invalid', (2) avoid the word 'please', (3) use 'URL' instead of 'web address', and (4) not open with 'you' as the subject of the error (e.g., not 'The URL you entered...' as the primary framing, or if it does use 'you', it frames the system action not user fault)? An acceptable correction: 'The URL entered doesn't match the expected format. Check the spelling and try again.' Pass if all four criteria are met."
+        }
+      ],
+      "prompt": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n<div class=\"modal-dialog\">\n  <h2 class=\"dialog-title\">Error - Invalid Web Address Provided!</h2>\n\n  <div class=\"dialog-body\">\n    <p class=\"error-desc\">We have detected that your web address is completely invalid. Please check the spelling.</p>\n\n    <div class=\"form-field-error\">\n      <label class=\"field-label\">Integration Endpoint</label>\n      <input type=\"text\" class=\"input-error\" value=\"http://invalid-address\" />\n      <span class=\"inline-error\">THE URL SPECIFIED IS UNACCEPTABLE</span>\n    </div>\n  </div>\n\n  <div class=\"dialog-footer\">\n    <button class=\"btn-secondary\">Cancel and Exit</button>\n    <button class=\"btn-primary\">Try Again</button>\n  </div>\n</div>",
+      "expectations": [
+        "Flags inline error 'THE URL SPECIFIED IS UNACCEPTABLE' for ALL CAPS casing violation and corrects to sentence case bold",
+        "Corrects 'Cancel and Exit' to CANCEL",
+        "Corrects dialog title to Verb Noun Title Case without banned words or punctuation",
+        "Explicitly identifies that the error description contains banned terms ('invalid', 'please', 'web address') and flags the user-blame framing ('your web address')",
+        "Rewrites the error description without 'invalid', 'please', 'web address', and without directly addressing 'you' as the cause"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "TC-UX-HTML-004",
+      "scenario": "Tabs Layout & Non-Parallel Content Grid \u2014 Tab Architecture, Links, and List Hierarchy",
+      "html": "<div class=\"tab-container\">\n  <ul class=\"tabs\">\n    <li class=\"tab-item active\">Billing Options</li>\n    <li class=\"tab-item\">Other Configurations</li>\n  </ul>\n</div>\n\n<div class=\"content-view\">\n  <h4 class=\"instruction-heading\">To review your configurations:</h4>\n\n  <ul class=\"unordered-list\">\n    <li>Ensure your current URL is correct</li>\n    <li>Verification of database connectivity</li>\n    <li>You must save updates before proceeding.</li>\n  </ul>\n\n  <div class=\"documentation-banner\">\n    <a href=\"/docs/setup\" class=\"doc-link\">Click here to check out the documentation on integrations</a>\n  </div>\n</div>",
+      "planted_violations": [
+        "Tab name 'Other Configurations' uses the forbidden generic word 'Other' and is too long (tabs should be 1-2 words)",
+        "List items are not parallel: mixes imperative fragment without period, abstract noun phrase, and full sentence with period",
+        "Documentation link uses 'Click here' \u2014 forbidden; should use 'See documentation for details' or 'Learn more about integrations'"
+      ],
+      "expected_output": "Audit identifying all 3 violations: tab \u2192 rename to a specific 1-2 word Title Case label (not 'Other'); list \u2192 rewrite as parallel imperative fragments or parallel full sentences with consistent punctuation; link \u2192 'See documentation for details' or 'Learn more about integrations'",
+      "assertions": [
+        {
+          "id": "4.1",
+          "text": "Flags 'Other Configurations' tab for using the forbidden word 'Other'",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the tab 'Other Configurations' as a violation? Does it specifically cite the rule against generic labels like 'Other'? Pass only if both are true."
+        },
+        {
+          "id": "4.2",
+          "text": "Flags the unordered list for non-parallel structure and inconsistent punctuation",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the list items for lacking parallel structure? Does it note the inconsistent punctuation (one item ends with a period, others don't)? Pass only if both issues are identified."
+        },
+        {
+          "id": "4.3",
+          "text": "Corrects list items to be grammatically parallel with consistent punctuation",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it propose corrected list items? Are the corrections parallel in structure (all starting with imperative verbs, or all noun phrases) and consistent in punctuation (all with periods or all without)? Pass if the proposed corrections are genuinely parallel."
+        },
+        {
+          "id": "4.4",
+          "text": "Corrects documentation link text to match the standard pattern",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag 'Click here to check out the documentation on integrations' for using 'Click here' (forbidden)? Does it propose a correction matching the standard pattern: 'See documentation for details' or 'Learn more about {specific topic}'? Pass only if the correction follows one of these patterns."
+        }
+      ],
+      "prompt": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n<div class=\"tab-container\">\n  <ul class=\"tabs\">\n    <li class=\"tab-item active\">Billing Options</li>\n    <li class=\"tab-item\">Other Configurations</li>\n  </ul>\n</div>\n\n<div class=\"content-view\">\n  <h4 class=\"instruction-heading\">To review your configurations:</h4>\n\n  <ul class=\"unordered-list\">\n    <li>Ensure your current URL is correct</li>\n    <li>Verification of database connectivity</li>\n    <li>You must save updates before proceeding.</li>\n  </ul>\n\n  <div class=\"documentation-banner\">\n    <a href=\"/docs/setup\" class=\"doc-link\">Click here to check out the documentation on integrations</a>\n  </div>\n</div>",
+      "expectations": [
+        "Flags 'Other Configurations' tab for using the forbidden word 'Other'",
+        "Flags the unordered list for non-parallel structure and inconsistent punctuation",
+        "Corrects list items to be grammatically parallel with consistent punctuation",
+        "Corrects documentation link text to match the standard pattern"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "TC-UX-HTML-005",
+      "scenario": "Add Team Member Form \u2014 Form Fields, Error States, Role Options",
+      "html": "<div class=\"add-member-form\">\n  <h1 class=\"form-title\">Add team member</h1>\n  <p class=\"form-description\">Please fill in the fields below to invite someone to your workspace.</p>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">full name</label>\n    <input type=\"text\" placeholder=\"Enter full name here...\" />\n  </div>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">Email Address</label>\n    <input type=\"email\" placeholder=\"Enter email address\" />\n    <div class=\"field-error\">Invalid email. You entered an incorrect email address.</div>\n  </div>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">Role</label>\n    <select>\n      <option>Select a Role</option>\n      <option>Administrator</option>\n      <option>Team Member</option>\n    </select>\n  </div>\n\n  <div class=\"form-actions\">\n    <button class=\"btn-secondary\">Cancel</button>\n    <button class=\"btn-primary\">Add Member</button>\n  </div>\n</div>",
+      "planted_violations": [
+        "Form title 'Add team member' is sentence case \u2014 dialog titles must be Title Case Verb Noun",
+        "Description starts with 'Please' \u2014 forbidden",
+        "Label 'full name' is lowercase \u2014 field labels must be Title Case",
+        "Placeholder 'Enter full name here...' contains an ellipsis \u2014 forbidden; also uses wordy phrasing",
+        "Error message 'Invalid email.' uses the forbidden word 'invalid' and blames the user ('You entered an incorrect email address')",
+        "Dropdown option 'Select a Role' \u2014 options should be sentence case: 'Select a role'",
+        "Dropdown option 'Administrator' \u2014 should be 'Admin'",
+        "Dropdown option 'Team Member' \u2014 Title Case for a non-proper noun; should be sentence case 'Team member' or just 'Member'",
+        "Buttons 'Cancel' and 'Add Member' are not ALL CAPS"
+      ],
+      "expected_output": "Audit identifying violations across title, description, label, placeholder, error message, dropdown options, and buttons. Corrections: title \u2192 'Add Team Member'; description \u2192 remove 'Please'; label \u2192 'Full Name'; placeholder \u2192 'Enter full name' (no ellipsis); error \u2192 verb-first without 'invalid' or blame, e.g. 'Enter a valid email address'; options \u2192 'Select a role', 'Admin', 'Member'; buttons \u2192 CANCEL, ADD MEMBER",
+      "assertions": [
+        {
+          "id": "5.1",
+          "text": "Flags error message for using 'invalid' and for blaming the user",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the error message for using the word 'invalid'? Does it also flag the user-blaming language ('You entered an incorrect email address')? Pass only if both violations are identified."
+        },
+        {
+          "id": "5.2",
+          "text": "Flags 'Administrator' dropdown option and corrects to 'Admin'",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag 'Administrator' as a forbidden term? Does it propose 'Admin' as the correction? Pass only if both are true."
+        },
+        {
+          "id": "5.3",
+          "text": "Flags 'Please' in the form description",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the word 'Please' in the form description as a violation? Pass only if it explicitly identifies this."
+        },
+        {
+          "id": "5.4",
+          "text": "Flags both buttons as not ALL CAPS and corrects them",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag 'Cancel' and 'Add Member' as buttons that should be ALL CAPS? Does it propose CANCEL and ADD MEMBER (or ADD) as corrections? Pass only if both buttons are flagged and corrected to ALL CAPS."
+        }
+      ],
+      "prompt": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n<div class=\"add-member-form\">\n  <h1 class=\"form-title\">Add team member</h1>\n  <p class=\"form-description\">Please fill in the fields below to invite someone to your workspace.</p>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">full name</label>\n    <input type=\"text\" placeholder=\"Enter full name here...\" />\n  </div>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">Email Address</label>\n    <input type=\"email\" placeholder=\"Enter email address\" />\n    <div class=\"field-error\">Invalid email. You entered an incorrect email address.</div>\n  </div>\n\n  <div class=\"form-group\">\n    <label class=\"field-label\">Role</label>\n    <select>\n      <option>Select a Role</option>\n      <option>Administrator</option>\n      <option>Team Member</option>\n    </select>\n  </div>\n\n  <div class=\"form-actions\">\n    <button class=\"btn-secondary\">Cancel</button>\n    <button class=\"btn-primary\">Add Member</button>\n  </div>\n</div>",
+      "expectations": [
+        "Flags error message for using 'invalid' and for blaming the user",
+        "Flags 'Administrator' dropdown option and corrects to 'Admin'",
+        "Flags 'Please' in the form description",
+        "Flags both buttons as not ALL CAPS and corrects them"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "TC-UX-HTML-006",
+      "scenario": "Create Process Automation Wizard \u2014 Milestone Labels, Tooltip, Navigation",
+      "html": "<div class=\"wizard-dialog\">\n  <h1 class=\"dialog-title\">Creating a New Process Automation</h1>\n\n  <div class=\"milestones\">\n    <span class=\"milestone active\">Step 1: Basic information</span>\n    <span class=\"milestone\">Step 2: Assigning owners</span>\n    <span class=\"milestone\">Step 3: Review &amp; Publish</span>\n  </div>\n\n  <div class=\"step-content\">\n    <div class=\"field\">\n      <label>Owners</label>\n      <div class=\"user-picker\" aria-label=\"Select users\"></div>\n      <span class=\"tooltip\" title=\"Please select the users who will be responsible for managing this. She or he will receive error notifications.\"></span>\n    </div>\n    <p class=\"field-hint\">Select the team members who should manage this automation. Make sure to add at least one person!</p>\n  </div>\n\n  <div class=\"wizard-footer\">\n    <button>Cancel</button>\n    <button>Go Back</button>\n    <button>Continue to Next Step</button>\n  </div>\n</div>",
+      "planted_violations": [
+        "Dialog title 'Creating a New Process Automation' uses gerund (-ing) instead of Verb Noun structure; 'a New' adds unnecessary articles",
+        "Milestones use 'Step N:' numbering prefix, gerunds ('Assigning'), and are not short Verb Noun Title Case",
+        "Milestone 'Review & Publish' uses ampersand \u2014 should use 'and'",
+        "Tooltip contains 'Please', gendered pronouns 'She or he', and doesn't follow the Boolean tooltip pattern",
+        "Field hint ends with an exclamation mark \u2014 no exclamation marks in UI copy",
+        "Button 'Cancel' is not ALL CAPS",
+        "Button 'Go Back' is not ALL CAPS and should be BACK",
+        "Button 'Continue to Next Step' is not ALL CAPS and should be NEXT"
+      ],
+      "expected_output": "Audit identifying violations across title, milestones, tooltip, hint, and buttons. Corrections: title \u2192 'Create Process Automation'; milestones \u2192 'Set Up Automation' / 'Assign Owners' / 'Review and Publish'; tooltip \u2192 remove 'Please', replace gendered pronouns with 'they', follow Boolean pattern; hint \u2192 remove exclamation mark; buttons \u2192 CANCEL, BACK, NEXT",
+      "assertions": [
+        {
+          "id": "6.1",
+          "text": "Flags gendered pronouns 'She or he' in the tooltip and corrects to 'they'",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the gendered pronouns 'She or he' (or equivalent) in the tooltip as a violation? Does it propose using 'they' instead? Pass only if both are true."
+        },
+        {
+          "id": "6.2",
+          "text": "Corrects wizard milestone label text to Verb Noun Title Case, replacing gerunds with imperative verbs (e.g., 'Assigning owners' \u2192 'Assign Owners', 'Basic information' \u2192 'Basic Information')",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the milestone labels for casing or gerund issues? Do the proposed corrections: (1) use Title Case, (2) use imperative verb form rather than gerunds (e.g., 'Assign' not 'Assigning'), and (3) capitalize all significant words? Note: whether or not the 'Step N:' prefix is removed is NOT part of this assertion \u2014 focus only on whether the label portion itself follows Title Case and imperative Verb Noun structure. Pass if the label text corrections meet all three criteria."
+        },
+        {
+          "id": "6.3",
+          "text": "Corrects navigation buttons to CANCEL, BACK, NEXT (ALL CAPS standard labels)",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag all three buttons ('Cancel', 'Go Back', 'Continue to Next Step') as violations? Does it propose CANCEL, BACK, and NEXT as corrections (all ALL CAPS, standard labels)? Pass only if all three are flagged and correctly mapped."
+        },
+        {
+          "id": "6.4",
+          "text": "Flags the ampersand in 'Review & Publish' and corrects to 'and'",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the use of '&' in the milestone 'Review & Publish'? Does it state that 'and' should be used instead of '&'? Pass only if both are true."
+        }
+      ],
+      "prompt": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n<div class=\"wizard-dialog\">\n  <h1 class=\"dialog-title\">Creating a New Process Automation</h1>\n\n  <div class=\"milestones\">\n    <span class=\"milestone active\">Step 1: Basic information</span>\n    <span class=\"milestone\">Step 2: Assigning owners</span>\n    <span class=\"milestone\">Step 3: Review &amp; Publish</span>\n  </div>\n\n  <div class=\"step-content\">\n    <div class=\"field\">\n      <label>Owners</label>\n      <div class=\"user-picker\" aria-label=\"Select users\"></div>\n      <span class=\"tooltip\" title=\"Please select the users who will be responsible for managing this. She or he will receive error notifications.\"></span>\n    </div>\n    <p class=\"field-hint\">Select the team members who should manage this automation. Make sure to add at least one person!</p>\n  </div>\n\n  <div class=\"wizard-footer\">\n    <button>Cancel</button>\n    <button>Go Back</button>\n    <button>Continue to Next Step</button>\n  </div>\n</div>",
+      "expectations": [
+        "Flags gendered pronouns 'She or he' in the tooltip and corrects to 'they'",
+        "Corrects wizard milestone label text to Verb Noun Title Case, replacing gerunds with imperative verbs (e.g., 'Assigning owners' \u2192 'Assign Owners', 'Basic information' \u2192 'Basic Information')",
+        "Corrects navigation buttons to CANCEL, BACK, NEXT (ALL CAPS standard labels)",
+        "Flags the ampersand in 'Review & Publish' and corrects to 'and'"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "TC-UX-HTML-007",
+      "scenario": "Delete Report Confirmation & Blocking Error \u2014 Error Framing and Button Standards",
+      "html": "<div class=\"modal-overlay\">\n\n  <!-- State 1: Confirmation -->\n  <div class=\"dialog\" id=\"confirm-dialog\">\n    <h2 class=\"dialog-title\">Are You Sure You Want to Delete?</h2>\n    <div class=\"dialog-body\">\n      <p>You are about to permanently delete the report \"Q3 Revenue Summary\". This cannot be recovered. Please confirm you want to do this.</p>\n    </div>\n    <div class=\"dialog-footer\">\n      <button class=\"btn-secondary\">No, Keep it</button>\n      <button class=\"btn-primary\">Yes, Delete It</button>\n    </div>\n  </div>\n\n  <!-- State 2: Blocking Error -->\n  <div class=\"dialog\" id=\"error-dialog\">\n    <h2 class=\"dialog-title\">Deletion Failed</h2>\n    <div class=\"dialog-body\">\n      <p>Your request to delete this report was unsuccessful. The system was unable to complete your request because the report is currently in use. Please try again later or contact Appian Support.</p>\n    </div>\n    <div class=\"dialog-footer\">\n      <button class=\"btn-primary\">OK</button>\n    </div>\n  </div>\n\n</div>",
+      "planted_violations": [
+        "Confirmation title 'Are You Sure You Want to Delete?' is a question sentence rather than 'Verb Noun?' Title Case (e.g., 'Delete Report?')",
+        "Confirmation body starts with 'You are about to' \u2014 user-centric framing; also contains 'Please'",
+        "Confirmation button 'No, Keep it' is not a standard label \u2014 should be CANCEL",
+        "Confirmation button 'Yes, Delete It' is not ALL CAPS and uses unnecessary 'Yes,' prefix \u2014 should be DELETE",
+        "Blocking error title 'Deletion Failed' is noun/past-tense, not the preferred pattern for blocking error titles",
+        "Blocking error body blames the user ('Your request'), contains 'Please', and mentions 'Appian Support' to what could be an end user",
+        "Blocking error dismiss button is OK \u2014 should be CLOSE for an info-only dialog with no state change"
+      ],
+      "expected_output": "Audit identifying violations across both dialog states. Corrections: confirm title \u2192 'Delete Report?'; confirm body \u2192 rewrite without 'You are about to' and 'Please'; confirm buttons \u2192 CANCEL, DELETE; error title \u2192 'Report Can't Be Deleted' or similar; error body \u2192 'We couldn't delete...' framing, no 'Please', no Appian Support mention; error button \u2192 CLOSE",
+      "assertions": [
+        {
+          "id": "7.1",
+          "text": "Flags 'Yes, Delete It' and 'No, Keep it' and corrects to DELETE and CANCEL",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag 'Yes, Delete It' as a non-standard button? Does it propose DELETE (ALL CAPS) as the correction? Does it flag 'No, Keep it' and propose CANCEL? Pass only if both buttons are flagged and both corrections are ALL CAPS standard labels."
+        },
+        {
+          "id": "7.2",
+          "text": "Flags blocking error dismiss button OK and corrects to CLOSE",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the OK button on the blocking error dialog? Does it explain that info-only dialogs with no state change should use CLOSE, not OK? Does it propose CLOSE as the correction? Pass only if all three are true."
+        },
+        {
+          "id": "7.3",
+          "text": "Flags 'Appian Support' mention in the blocking error body",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag the reference to 'Appian Support' in the error message body? Does it state that Appian Support should never be mentioned to end users? Pass only if both are true."
+        },
+        {
+          "id": "7.4",
+          "text": "Flags the confirmation title for not following Verb Noun Title Case format and proposes a correction",
+          "type": "llm-judge",
+          "prompt": "Read the audit output. Does it flag 'Are You Sure You Want to Delete?' as not following the Verb Noun Title Case pattern for confirmation dialog titles? Does it propose a correction in that pattern (e.g., 'Delete Report?')? Pass if both are true."
+        }
+      ],
+      "prompt": "Read the ux-content-standards skill, then audit the following HTML snippet. Identify every content standards violation and provide the corrected text for each. Be specific \u2014 name the element, quote the violating string, cite the rule, and give the exact corrected output.\n\nHTML to audit:\n\n<div class=\"modal-overlay\">\n\n  <!-- State 1: Confirmation -->\n  <div class=\"dialog\" id=\"confirm-dialog\">\n    <h2 class=\"dialog-title\">Are You Sure You Want to Delete?</h2>\n    <div class=\"dialog-body\">\n      <p>You are about to permanently delete the report \"Q3 Revenue Summary\". This cannot be recovered. Please confirm you want to do this.</p>\n    </div>\n    <div class=\"dialog-footer\">\n      <button class=\"btn-secondary\">No, Keep it</button>\n      <button class=\"btn-primary\">Yes, Delete It</button>\n    </div>\n  </div>\n\n  <!-- State 2: Blocking Error -->\n  <div class=\"dialog\" id=\"error-dialog\">\n    <h2 class=\"dialog-title\">Deletion Failed</h2>\n    <div class=\"dialog-body\">\n      <p>Your request to delete this report was unsuccessful. The system was unable to complete your request because the report is currently in use. Please try again later or contact Appian Support.</p>\n    </div>\n    <div class=\"dialog-footer\">\n      <button class=\"btn-primary\">OK</button>\n    </div>\n  </div>\n\n</div>",
+      "expectations": [
+        "Flags 'Yes, Delete It' and 'No, Keep it' and corrects to DELETE and CANCEL",
+        "Flags blocking error dismiss button OK and corrects to CLOSE",
+        "Flags 'Appian Support' mention in the blocking error body",
+        "Flags the confirmation title for not following Verb Noun Title Case format and proposes a correction"
+      ]
+    }
+  ]
+}

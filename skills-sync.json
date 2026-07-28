@@ -53,6 +53,13 @@
       "path": "skills/usability-testing",
       "branch": "main"
     },
+    "ux-content-standards": {
+      "host": "gitlab",
+      "gitlabHost": "gitlab.appian-stratus.com",
+      "repo": "docs/ux-manual",
+      "path": "skills/ux-content-standards",
+      "branch": "main"
+    },
     "vignette": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
