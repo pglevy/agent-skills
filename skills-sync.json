@@ -38,6 +38,13 @@
       "repo": "docs/ux-manual",
       "path": "skills/quick-mockup",
       "branch": "main"
+    },
+    "tool-audit": {
+      "host": "gitlab",
+      "gitlabHost": "gitlab.appian-stratus.com",
+      "repo": "docs/ux-manual",
+      "path": "skills/tool-audit",
+      "branch": "main"
     }
   }
 }
