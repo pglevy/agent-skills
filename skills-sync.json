@@ -21,49 +21,49 @@
     "style-audit": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
-      "repo": "docs/ux-manual",
+      "repo": "docs/ux-skillset",
       "path": "skills/style-audit",
       "branch": "main"
     },
     "migrate-to-gitlab": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
-      "repo": "docs/ux-manual",
+      "repo": "docs/ux-skillset",
       "path": "skills/migrate-to-gitlab",
       "branch": "main"
     },
     "quick-mockup": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
-      "repo": "docs/ux-manual",
+      "repo": "docs/ux-skillset",
       "path": "skills/quick-mockup",
       "branch": "main"
     },
     "tool-audit": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
-      "repo": "docs/ux-manual",
+      "repo": "docs/ux-skillset",
       "path": "skills/tool-audit",
       "branch": "main"
     },
     "usability-testing": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
-      "repo": "docs/ux-manual",
+      "repo": "docs/ux-skillset",
       "path": "skills/usability-testing",
       "branch": "main"
     },
     "ux-content-standards": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
-      "repo": "docs/ux-manual",
+      "repo": "docs/ux-skillset",
       "path": "skills/ux-content-standards",
       "branch": "main"
     },
     "vignette": {
       "host": "gitlab",
       "gitlabHost": "gitlab.appian-stratus.com",
-      "repo": "docs/ux-manual",
+      "repo": "docs/ux-skillset",
       "path": "skills/vignette",
       "branch": "main"
     }
