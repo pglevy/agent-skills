@@ -10,8 +10,11 @@ Base path for account-scoped endpoints: `<FIZZY_BASE_URL><FIZZY_ACCOUNT_SLUG>/..
 
 - `GET /my/identity` — accounts you have access to, with your user id/slug per
   account. Use once during setup to find `FIZZY_ACCOUNT_SLUG`.
-- `GET /:account_slug/users` — list active users in the account. Find the
-  "Kiro" user here to resolve `FIZZY_KIRO_USER_ID`.
+- `GET /:account_slug/users` — list active users in the account (includes a
+  `system` user; ignore it). Use to resolve a name to a user id for
+  assigning.
+- The token's own user in an account is `GET /my/identity` →
+  `accounts[].user.id` (the account is matched by `slug`).
 
 ## Cards
 

@@ -3,6 +3,7 @@
 My collection of borrowed and homegrown agent skills
 
 - **[create-mcp-app](./create-mcp-app):** Provides comprehensive guidance for building MCP Apps with interactive UIs (Source: [modelcontextprotocol/ext-apps](https://github.com/modelcontextprotocol/ext-apps/tree/main/plugins/mcp-apps/skills/create-mcp-app))
+- **[fizzy](./fizzy):** Work a Fizzy kanban board as an agent: run `/fizzy` and it picks up cards assigned to the Work Horse user, does the tasks, and reports back via comments, column moves, and reassignment
 - **[frontend-design](./frontend-design):** Create distinctive, production-grade frontend interfaces with high design quality (Source: [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design))
 - **[higher-ed-fred-analysis](./higher-ed-fred-analysis):** Experiment to create sophisticated economic data analyses and visualizations for higher education stakeholders using FRED (Federal Reserve Economic Data)
 - **[migrate-to-gitlab](./migrate-to-gitlab):** Migrate an existing local git repository to a GitLab instance by creating a new remote repo and updating the origin (Source: gitlab.appian-stratus.com/docs/ux-manual)
