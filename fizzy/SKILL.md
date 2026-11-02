@@ -80,10 +80,13 @@ it (`creator`): that's who you report to.
 
 ### 3. Handle more than one card
 
-One card: do it inline. Several: spin off one sub-agent per card in parallel.
-Give each the card number and the path to `scripts/fizzy.sh`, and the
-instructions from steps 4 and 5. Each sub-agent writes back to its own card
-itself rather than reporting to you to relay.
+One card: do it inline. Several: if your environment has a way to delegate
+work in parallel — sub-agents, tasks, workflows, whatever your harness calls
+it — use it, one delegate per card. Give each the card number, the path to
+`scripts/fizzy.sh`, and the instructions from steps 4 and 5, and have each one
+write back to its own card directly rather than reporting to you to relay.
+If nothing like that is available, work the cards yourself one at a time
+instead; don't force parallelism the environment doesn't support.
 
 ### 4. Do the work, then write back to the card
 
