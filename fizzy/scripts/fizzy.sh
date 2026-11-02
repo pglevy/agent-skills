@@ -114,8 +114,11 @@ cmd_columns() {
 
 # Open cards on the board assigned to the agent. With "attention" only the ones
 # where the ball is in the agent's court: nobody has commented yet, or the last
-# comment came from someone else. A card the agent just reported on (its own
-# comment is last) stays quiet until the user replies.
+# *substantive* comment came from someone else. System comments (triage moves,
+# assignments) are side effects of the agent's own actions, not a reply from a
+# person, so they're ignored when finding the last commenter — otherwise the
+# agent's own "assign the creator" step after reporting would immediately make
+# its own card look unanswered again.
 list_cards() {
   require_jq
   local mode="$1" board me candidates
@@ -128,7 +131,8 @@ list_cards() {
     # Only open cards triaged into a real column (not closed, not in Maybe?/Not Now
     # where `column` is absent).
     echo "$detail" | jq -e '(.closed != true) and (.column != null)' >/dev/null || continue
-    last=$(api GET "/cards/${number}/comments" | jq -c 'if length == 0 then null else .[-1].creator.id end')
+    last=$(api GET "/cards/${number}/comments" \
+      | jq -c '[.[] | select(.creator.role != "system")] | if length == 0 then null else .[-1].creator.id end')
     echo "$detail" | jq -c --argjson last "$last" --arg me "$me" '
       {number, title, column: .column.name, url,
        created_by: .creator.name,
