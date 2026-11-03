@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Room Booking Flow - Breadboarding</title>
+    <link rel="stylesheet" href="breadboarding-kit.css">
+</head>
+<body>
+    <div class="flow-title">Meeting Room Booking Flow</div>
+    
+    <div class="flow-container">
+        <!-- Screen 1: Find Room -->
+        <div class="screen">
+            <div class="screen-title">1. Find Room</div>
+            <div class="input-area">□ Date picker</div>
+            <div class="input-area">□ Time range</div>
+            <div class="input-area">□ Capacity filter</div>
+            <div class="element">Conference A (6 people • Projector)</div>
+            <div class="element">Conference B (12 people • TV)</div>
+            <div class="element">Huddle Room (4 people • Phone)</div>
+            <div class="button">Select Room</div>
+            <div class="note">Filter by equipment?</div>
+            <div class="arrow">→</div>
+        </div>
+        
+        <!-- Screen 2: Conference A -->
+        <div class="screen">
+            <div class="screen-title">2. Conference A</div>
+            <div class="element">Thursday, Dec 15</div>
+            <div class="element">Room details and capacity</div>
+            <div class="input-area">□ 9:00-10:00 AM</div>
+            <div class="input-area">□ 10:30-11:30 AM</div>
+            <div class="element unavailable">2:00-3:00 PM (Booked)</div>
+            <div class="input-area">□ 3:30-4:30 PM</div>
+            <div class="button">Continue</div>
+            <div class="arrow">→</div>
+        </div>
+        
+        <!-- Screen 3: Meeting Details -->
+        <div class="screen">
+            <div class="screen-title">3. Meeting Details</div>
+            <div class="input-area text-field">□ Meeting Title</div>
+            <div class="input-area email-inputs">□ Add Attendees</div>
+            <div class="input-area">□ Send calendar invite</div>
+            <div class="element">Conf A • 10:30-11:30 AM</div>
+            <div class="button primary">Book Room</div>
+            <div class="note right">Setup time needed?</div>
+            <div class="arrow">→</div>
+        </div>
+        
+        <!-- Screen 4: Room Booked -->
+        <div class="screen email-screen">
+            <div class="screen-title">4. Room Booked</div>
+            <div class="confirmation">✓ Conference A reserved</div>
+            <div class="element">Thu, Dec 15 (10:30-11:30 AM)</div>
+            <div class="element">Calendar invite sent to 4 people</div>
+            <div class="button secondary">View Booking</div>
+            <div class="button primary">Done</div>
+        </div>
+    </div>
+    
+    <div class="discussion-box">
+        <strong>Key Elements:</strong><br>
+        • Date/time filter with real-time availability checking<br>
+        • Room cards showing capacity and equipment information<br>
+        • Time slot picker with visual conflict indication<br>
+        • Attendee management with calendar integration<br>
+        • Automatic invite sending on confirmation
+    </div>
+</body>
+</html>
