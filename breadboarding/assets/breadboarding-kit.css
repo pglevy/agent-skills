@@ -1,0 +1,190 @@
+/* Breadboarding Kit CSS - Rapid UX Flow Wireframes */
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: #f8f8f8;
+    margin: 0;
+    padding: 40px 20px;
+    overflow-x: auto;
+}
+
+.flow-container {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+    min-width: max-content;
+    padding: 20px;
+}
+
+.screen {
+    background: white;
+    border: 6px solid #333;
+    border-radius: 20px;
+    padding: 30px;
+    width: 220px;
+    min-height: 300px;
+    position: relative;
+    box-shadow: 8px 8px 0px #ddd;
+}
+
+.screen-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 4px solid #333;
+    padding-bottom: 10px;
+}
+
+/* Display elements - "display:" in outline */
+.element {
+    background: #f0f0f0;
+    border: 3px solid #666;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Input elements - "input:" in outline */
+.input-area {
+    background: #fff;
+    border: 3px dashed #999;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: left;
+    color: #666;
+}
+
+/* Buttons - "button:" in outline */
+.button {
+    background: #2196F3;
+    color: white;
+    border: 4px solid #1565C0;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 4px 4px 0px #ccc;
+}
+
+.button.primary {
+    background: #2196F3;
+    border-color: #1565C0;
+    box-shadow: 4px 4px 0px #ccc;
+}
+
+.button.secondary {
+    background: #777;
+    border-color: #555;
+    box-shadow: 4px 4px 0px #ccc;
+}
+
+/* Flow arrows */
+.arrow {
+    position: absolute;
+    right: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: #666;
+    font-weight: bold;
+}
+
+/* Special screen types */
+.email-screen {
+    background: #E3F2FD;
+    border-color: #1976D2;
+}
+
+/* Confirmation elements - "confirm:" in outline */
+.confirmation {
+    background: #E8F5E8;
+    border: 4px solid #4CAF50;
+    color: #2E7D32;
+    font-weight: bold;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: left;
+    border-radius: 4px;
+}
+
+/* Sticky notes - "note:" in outline */
+.note {
+    position: absolute;
+    bottom: -15px;
+    left: 20px;
+    background: #FFE082;
+    border: 3px solid #FF8F00;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    transform: rotate(-3deg);
+}
+
+.note.right {
+    left: auto;
+    right: 20px;
+    transform: rotate(2deg);
+}
+
+/* Flow title */
+.flow-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+/* Discussion box */
+.discussion-box {
+    margin-top: 40px;
+    padding: 20px;
+    background: #FFF3E0;
+    border: 3px solid #FF8F00;
+    border-radius: 15px;
+    max-width: 600px;
+}
+
+/* Element modifiers */
+.element.unavailable {
+    background: #ffebee;
+    border-color: #f44336;
+    color: #d32f2f;
+}
+
+.input-area.text-field {
+    font-style: italic;
+}
+
+.input-area.email-inputs {
+    font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .flow-container {
+        flex-direction: column;
+        gap: 40px;
+        min-width: auto;
+    }
+    
+    .screen {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .arrow {
+        position: static;
+        text-align: center;
+        font-size: 30px;
+        margin: 20px 0;
+        transform: rotate(90deg);
+    }
+}

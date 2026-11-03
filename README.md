@@ -2,6 +2,7 @@
 
 My collection of borrowed and homegrown agent skills
 
+- **[breadboarding](./breadboarding):** Quickly sketch UX flows as intentionally rough HTML wireframes from a description or a structured outline, based on Shape Up's breadboarding method (Source: [pglevy/breadboarding-kit](https://github.com/pglevy/breadboarding-kit))
 - **[create-mcp-app](./create-mcp-app):** Provides comprehensive guidance for building MCP Apps with interactive UIs (Source: [modelcontextprotocol/ext-apps](https://github.com/modelcontextprotocol/ext-apps/tree/main/plugins/mcp-apps/skills/create-mcp-app))
 - **[fizzy](./fizzy):** Work a Fizzy kanban board as an agent: run `/fizzy` and it picks up cards assigned to the Work Horse user, does the tasks, and reports back via comments, column moves, and reassignment
 - **[frontend-design](./frontend-design):** Create distinctive, production-grade frontend interfaces with high design quality (Source: [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design))
