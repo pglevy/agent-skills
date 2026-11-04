@@ -145,6 +145,21 @@ handoffs, stay assigned so a reply brings the card back to your inbox.
 Keep comments short and concrete: what you did, what you need, nothing else.
 No narration of your process.
 
+**Project shorthand.** Cards name projects as `<host>/<project>`, e.g.
+`github/agent-skills` or `gitlab/dotfiles`. That is shorthand for the local
+checkout at `~/Documents/GitHub/<project>` or `~/Documents/GitLab/<project>`.
+Resolve it there; don't ask where the project is. (Same convention as the
+context file.)
+
+**Include clickable links.** Whenever the work produces something that lives
+at a URL, put the full link in the comment so Philip can click straight
+through from the card instead of hunting for it: PR/MR links (open the PR/MR
+with `gh pr create` / `glab mr create` when the card asks for one, or give the
+"new MR" link if told not to open it), branch or commit links, issues you
+opened, deployed pages, and the card's own URL when handing off. Link text
+should say what it is (`MR !2`, not a bare hash). Skip links only when there
+is genuinely nothing linkable, e.g. a pure answer or question.
+
 **Writing comments.** Fizzy comments are rich text, so write the body in
 Markdown and `comment` converts it to HTML for you. Pass multi-line bodies on
 stdin with `-` rather than as a quoted argument; it avoids shell-quoting
