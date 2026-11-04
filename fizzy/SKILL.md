@@ -104,14 +104,16 @@ Then close the loop. Pick the outcome that's true:
 
 **Done, ready for review.** Comment a short summary of what you did and
 anything worth knowing (files changed, decisions, where the output is), move
-the card to the review-type column, and add the creator as an assignee so it
-lands in their queue:
+the card to the review-type column, and make the creator the **only** assignee
+(add them, then unassign yourself) so it lands in their queue and the card stays
+clean:
 
 ```sh
 scripts/fizzy.sh comment <number> "**Done:** <summary>"   # multi-line: use - and a heredoc, see below
 scripts/fizzy.sh columns                      # find the review-like column
 scripts/fizzy.sh triage <number> "<column name or id>"
 scripts/fizzy.sh assign <number> "<creator name>"
+scripts/fizzy.sh unassign <number> "Work Horse"
 ```
 
 Don't assume a column is literally named "Review". Match by intent (a column
@@ -134,9 +136,11 @@ doubt, move to review instead; closing is the user's call.
 
 Assignment in Fizzy is a list, not a single owner, so a card can have you and
 the user both on it. `assign` and `unassign` are idempotent (they check first,
-since the underlying API only toggles). Keep yourself assigned when you hand
-off for review; it's what lets a reply from the user put the card back in your
-inbox.
+since the underlying API only toggles). Cards in Review are assigned to the
+user only: unassign yourself when handing off for review. Since `inbox` only
+lists cards assigned to you, the user reassigns Work Horse (or moves the card
+back to a work column) when they want more done. For blocked/question
+handoffs, stay assigned so a reply brings the card back to your inbox.
 
 Keep comments short and concrete: what you did, what you need, nothing else.
 No narration of your process.
