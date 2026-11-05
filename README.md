@@ -10,6 +10,7 @@ My collection of borrowed and homegrown agent skills
 - **[migrate-to-gitlab](./migrate-to-gitlab):** Migrate an existing local git repository to a GitLab instance by creating a new remote repo and updating the origin (Source: gitlab.appian-stratus.com/docs/ux-manual)
 - **[quick-mockup](./quick-mockup):** Generate UI mockups as standalone HTML pages using the Sailwind design token system (Source: gitlab.appian-stratus.com/docs/ux-manual)
 - **[skill-creator](./skill-creator):** Guide for creating effective skills (Source: [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/skill-creator))
+- **[session-to-markdown](./session-to-markdown):** Convert an exported Kiro session folder (`messages.jsonl`) into a readable markdown transcript
 - **[spec-driven-dev](./spec-driven-dev):** Guide for spec-based agent-driven development similar to Kiro, but for use with other agents
 - **[style-audit](./style-audit):** Analyze a frontend codebase for design token discrepancies against Sailwind tokens, generate a TPS report, apply fixes, and optionally open a merge request (Source: gitlab.appian-stratus.com/docs/ux-manual)
 - **[tool-audit](./tool-audit):** Audit the current machine and workspace for recommended CLI tools and MCP server configurations (Source: gitlab.appian-stratus.com/docs/ux-manual)
