@@ -24,6 +24,9 @@ Base path for account-scoped endpoints: `<FIZZY_BASE_URL><FIZZY_ACCOUNT_SLUG>/..
 - `GET /:account_slug/cards/:number` — full card detail: `title`,
   `description`, `description_html`, `tags`, `closed`, `column` (absent if the
   card is in Maybe?/Not Now/Done), `assignees`, `steps`, `comments_url`.
+- `POST /:account_slug/boards/:board_id/cards` body
+  `{"card": {"title": "...", "description": "<html>"}}` — create. New cards
+  have no column (Maybe?).
 - `POST /:account_slug/cards/:number/triage` body `{"column_id": "..."}` —
   move into a column.
 - `DELETE /:account_slug/cards/:number/triage` — send back to triage

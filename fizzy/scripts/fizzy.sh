@@ -184,6 +184,18 @@ cmd_comment() {
   echo "Commented on card ${number}."
 }
 
+cmd_create() {
+  # create <title> [markdown|-]    New card on the watched board. Lands in "Maybe?"
+  # (no column), where Philip looks for new cards. Body is optional.
+  local title="${1:?card title required}" body="${2:-}"
+  [[ "$body" == "-" ]] && body=$(cat)
+  [[ -n "$body" ]] && body=$(printf '%s\n' "$body" | md_to_html)
+  local json resp
+  json=$(jq -nc --arg t "$title" --arg d "$body" '{card: ({title: $t} + (if $d == "" then {} else {description: $d} end))}')
+  resp=$(api POST "/boards/$(board_id)/cards" "$json")
+  echo "$resp" | jq -er '"Created card \(.number): \(.url)"' 2>/dev/null || { echo "Create failed: $resp" >&2; exit 1; }
+}
+
 cmd_triage() {
   local number="${1:?card number required}" column="${2:?column id or name required}" id
   # Accept a column name as well as an id.
@@ -259,6 +271,7 @@ case "${1:-}" in
   card)             shift; cmd_card "$@" ;;
   comments)         shift; cmd_comments "$@" ;;
   comment)          shift; cmd_comment "$@" ;;
+  create)           shift; cmd_create "$@" ;;
   triage)           shift; cmd_triage "$@" ;;
   assign)           shift; cmd_assign "$@" ;;
   unassign)         shift; cmd_unassign "$@" ;;
@@ -278,6 +291,7 @@ Usage: fizzy.sh <command> [args]
   card <number>                 Full detail for a card
   comments <number>             List comments on a card
   comment <number> <md|->       Post a comment (Markdown, converted to HTML; "-" reads stdin; add --html for raw HTML)
+  create <title> [md|-]         New card on the board (lands in Maybe?); optional Markdown description
   triage <number> <column>      Move a card into a column (id or name)
   assign <number> <user>        Assign a user (id or name); no-op if already assigned
   unassign <number> <user>      Unassign a user (id or name); no-op if not assigned

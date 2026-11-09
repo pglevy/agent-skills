@@ -191,6 +191,27 @@ outcome (done / blocked / handed off / skipped). The comments are the
 authoritative record, but they asked you to check the board, so they
 shouldn't have to reread every card.
 
+### Leaving feedback as new cards
+
+Don't assume Philip reads the terminal output after a run. If you have
+feedback at the end of a sweep (context-file suggestions, tooling quirks,
+follow-ups, bugs in the skill, ideas), file each as a new card instead of
+only saying it in chat:
+
+```sh
+scripts/fizzy.sh create "Short title" - <<'EOF'
+Details in Markdown.
+EOF
+```
+
+- New cards land in "Maybe?" (no column), which is where Philip looks. Leave
+  them there: don't triage them into a work column and don't assign yourself.
+- One card per topic, titled so it makes sense at a glance.
+- Examples: "the web-tools repo is checked out at `~/Documents/GitHub/tools`
+  (folder name differs from repo name)", or "`invoke_sub_agent` needs a
+  `prompt` even for `semantic_reviewer`; use the dedicated tool".
+- Still give the short chat summary; the cards are the durable record.
+
 ## Commands
 
 | Command | What it does |
@@ -200,6 +221,7 @@ shouldn't have to reread every card.
 | `card <n>` / `comments <n>` | Read a card / its thread |
 | `comment <n> <markdown or ->` | Post a comment (Markdown; `-` reads stdin) |
 | `columns` | List the board's columns |
+| `create <title> [markdown or -]` | New card on the board (lands in Maybe?), for feedback/issues |
 | `triage <n> <column>` | Move a card (column name or id) |
 | `users` | List users, to find who to assign to |
 | `assign <n> <user>` / `unassign <n> <user>` | Add/remove an assignee (name or id) |
