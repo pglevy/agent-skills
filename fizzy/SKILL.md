@@ -24,6 +24,9 @@ scripts/fizzy.sh inbox
 - Empty output: nothing needs you. Say so in one line and stop. Don't invent
   work.
 - Otherwise, each line is a card that needs you, then follow "The loop" below.
+- **Golden tickets first.** A card promoted to a golden ticket shows
+  `"golden":true` and is listed before the rest. Do those before picking up any
+  other card, and don't hand them to a delegate that delays them behind others.
 
 Credentials are in `~/.config/fizzy/credentials`; working context (where
 projects live, conventions) is in `~/.config/fizzy/context.md`. If the script says it's

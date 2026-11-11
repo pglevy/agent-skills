@@ -134,12 +134,12 @@ list_cards() {
     last=$(api GET "/cards/${number}/comments" \
       | jq -c '[.[] | select(.creator.role != "system")] | if length == 0 then null else .[-1].creator.id end')
     echo "$detail" | jq -c --argjson last "$last" --arg me "$me" '
-      {number, title, column: .column.name, url,
+      {number, title, golden: (.golden == true), column: .column.name, url,
        created_by: .creator.name,
        last_commenter_is_agent: ($last == $me),
        needs_attention: ($last != $me)}' \
       | { if [[ "$mode" == "attention" ]]; then jq -c 'select(.needs_attention)'; else cat; fi; }
-  done
+  done | jq -sc 'sort_by(.golden | not) | .[]'  # golden tickets first
 }
 
 cmd_inbox()          { list_cards attention; }
