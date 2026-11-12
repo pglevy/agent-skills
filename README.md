@@ -42,6 +42,20 @@ Sources are defined in `skills-sync.json`. To add a new sourced skill, add an en
 }
 ```
 
+By default the whole `path` directory is copied. To copy only specific files (e.g. when a repo's `SKILL.md` lives at the repo root alongside unrelated code), set `path` to `"."` and add a `files` list:
+
+```json
+{
+  "skill-name": {
+    "host": "github",
+    "repo": "owner/repo",
+    "path": ".",
+    "branch": "main",
+    "files": ["SKILL.md"]
+  }
+}
+```
+
 For internal GitLab repos, use `"host": "gitlab"` and add `"gitlabHost": "gitlab.example.com"`.
 
 **Requirements:** `jq`, `gh` (for GitHub sources), `glab` (for GitLab sources)

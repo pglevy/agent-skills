@@ -12,6 +12,15 @@
       "path": "skills/skill-creator",
       "branch": "main"
     },
+    "browser-harness": {
+      "host": "github",
+      "repo": "browser-use/browser-harness",
+      "path": ".",
+      "branch": "main",
+      "files": [
+        "SKILL.md"
+      ]
+    },
     "create-mcp-app": {
       "host": "github",
       "repo": "modelcontextprotocol/ext-apps",

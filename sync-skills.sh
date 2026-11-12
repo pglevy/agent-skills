@@ -32,6 +32,39 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Install a downloaded skill source dir into $SCRIPT_DIR/$SKILL.
+# If the skill's config has a "files" array, copy only those files (relative
+# to the source dir). Otherwise copy the whole directory.
+install_skill() {
+  local src="$1"
+  local dest="$SCRIPT_DIR/$SKILL"
+  local files=()
+  while IFS= read -r f; do
+    files+=("$f")
+  done < <(jq -r ".sources[\"$SKILL\"].files // [] | .[]" "$CONFIG")
+
+  if [ ${#files[@]} -eq 0 ]; then
+    rm -rf "$dest"
+    cp -R "$src" "$dest"
+    return 0
+  fi
+
+  # Verify every requested file exists before touching the local copy
+  for f in "${files[@]}"; do
+    if [ ! -e "$src/$f" ]; then
+      echo -e "${RED}  ✗ File '$f' not found at '$PATH_IN_REPO'${NC}"
+      return 1
+    fi
+  done
+
+  rm -rf "$dest"
+  mkdir -p "$dest"
+  for f in "${files[@]}"; do
+    mkdir -p "$dest/$(dirname "$f")"
+    cp -R "$src/$f" "$dest/$f"
+  done
+}
+
 # Get list of skills to sync
 if [ $# -gt 0 ]; then
   SKILLS=("$@")
@@ -87,10 +120,9 @@ for SKILL in "${SKILLS[@]}"; do
         EXTRACTED_DIR=$(find "$TMPDIR" -maxdepth 1 -type d ! -name "$(basename "$TMPDIR")" | head -1)
 
         if [ -n "$EXTRACTED_DIR" ] && [ -d "$EXTRACTED_DIR/$PATH_IN_REPO" ]; then
-          # Remove existing local skill directory and replace
-          rm -rf "$SCRIPT_DIR/$SKILL"
-          cp -R "$EXTRACTED_DIR/$PATH_IN_REPO" "$SCRIPT_DIR/$SKILL"
-          SUCCESS=true
+          if install_skill "$EXTRACTED_DIR/$PATH_IN_REPO"; then
+            SUCCESS=true
+          fi
         else
           echo -e "${RED}  ✗ Path '$PATH_IN_REPO' not found in archive${NC}"
         fi
@@ -123,9 +155,9 @@ for SKILL in "${SKILLS[@]}"; do
         EXTRACTED_DIR=$(find "$TMPDIR" -maxdepth 1 -type d ! -name "$(basename "$TMPDIR")" | head -1)
 
         if [ -n "$EXTRACTED_DIR" ] && [ -d "$EXTRACTED_DIR/$PATH_IN_REPO" ]; then
-          rm -rf "$SCRIPT_DIR/$SKILL"
-          cp -R "$EXTRACTED_DIR/$PATH_IN_REPO" "$SCRIPT_DIR/$SKILL"
-          SUCCESS=true
+          if install_skill "$EXTRACTED_DIR/$PATH_IN_REPO"; then
+            SUCCESS=true
+          fi
         else
           echo -e "${RED}  ✗ Path '$PATH_IN_REPO' not found in archive${NC}"
         fi
