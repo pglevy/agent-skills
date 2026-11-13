@@ -145,7 +145,8 @@ scripts/start-browser.sh [--headed]   # launch isolated Chrome on port 9333 (BH_
 scripts/bh <<'PY'                     # browser-harness bound to that Chrome (BU_NAME=pony, BU_CDP_URL, no tab marker)
 print(page_info())
 PY
-scripts/stop-browser.sh               # stop the daemon and Chrome; the next start wipes the profile
+scripts/stop-browser.sh               # stop the daemon and this workspace's Chrome; the next start wipes the profile
+scripts/stop-browser.sh --all         # stop every isolated Chrome on the machine, from any workspace
 ```
 
 - Use `scripts/bh` instead of bare `browser-harness` for this instance; the bare command attaches to the user's everyday Chrome.

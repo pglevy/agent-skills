@@ -32,6 +32,7 @@ for f in bh start-browser.sh stop-browser.sh; do
   check "scripts/$f passes bash -n" bash -n "$SKILL/scripts/$f"
 done
 check "SKILL.md documents the launch scripts" grep -q '^## Isolated Chrome' "$SKILL/SKILL.md"
+check "stop-browser.sh supports --all" grep -q -- "--all" "$SKILL/scripts/stop-browser.sh"
 check "browser-harness is not in skills-sync.json" test "$(jq -r '.sources | has("browser-harness")' "$ROOT/skills-sync.json")" = "false"
 check "evals.json is valid JSON" jq -e . "$SKILL/evals/evals.json"
 check "evals.json skill_name matches" test "$(jq -r .skill_name "$SKILL/evals/evals.json")" = "browser-harness"
