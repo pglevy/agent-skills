@@ -15,6 +15,10 @@ Domain skills are off by default. Set `BH_DOMAIN_SKILLS=1` to enable them; see t
 
 **If `BH_DOMAIN_SKILLS=1` and the task is site-specific, read every file in the matching `$BH_AGENT_WORKSPACE/domain-skills/<site>/` directory before inventing an approach.**
 
+## Appian / SAIL
+
+When the task involves an Appian site or SAIL interface (an `*.appiancloud.com` host, a self-hosted Appian URL, `/suite/`, `/sites/`, or the user mentions Appian, SAIL, a record, a process, or a site), read `references/appian-sail.md` in this skill's directory before interacting. It covers coordinate spaces, re-querying positions before each click, typing into React-controlled fields, and how to verify a "nothing happened" result. Skip it for non-Appian pages.
+
 ## Usage
 
 ```bash

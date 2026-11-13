@@ -1,0 +1,55 @@
+{
+  "skill_name": "browser-harness",
+  "focus": "appian-reference-routing",
+  "evals": [
+    {
+      "id": 1,
+      "name": "appian-task-reads-reference",
+      "prompt": "Open https://example.appiancloud.com/suite/sites/orders, click the 'New Order' button, and confirm the form opens.",
+      "expected_output": "The agent reads references/appian-sail.md before interacting, resolves the button position fresh right before clicking, and verifies the result in the DOM.",
+      "files": [],
+      "expectations": [
+        "Agent reads browser-harness/references/appian-sail.md before the first click",
+        "Agent resolves the button position via the accessibility tree, getBoundingClientRect, or a DOM query rather than guessing from a screenshot",
+        "Agent re-queries the element position immediately before the click",
+        "Agent verifies the form opened with a DOM or page_info check, not only a screenshot"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "non-appian-task-skips-reference",
+      "prompt": "Use the browser to open https://news.ycombinator.com, log which story is first, and report its title.",
+      "expected_output": "The agent uses browser-harness without loading the Appian reference.",
+      "files": [],
+      "expectations": [
+        "Agent does not read references/appian-sail.md",
+        "Agent completes the task with new_tab and page content extraction"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "appian-click-does-nothing-escalation",
+      "prompt": "On the Appian interface already open in my browser, I clicked 'Submit' and nothing seems to happen. Check whether the button is actually broken.",
+      "expected_output": "The agent follows the escalation order: re-resolve and retry, direct DOM .click(), then stacked evidence (MutationObserver, network, text diff) before calling it a defect.",
+      "files": [],
+      "expectations": [
+        "Agent retries with a freshly resolved coordinate click first",
+        "Agent then tries a direct DOM .click() via js(...)",
+        "Agent attaches a MutationObserver or checks network activity before the click",
+        "Agent does not report a defect based only on a before/after screenshot comparison"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "appian-typing-verified",
+      "prompt": "In the Appian form open in my browser, fill the 'Customer name' field with 'Acme Corp' and click Next.",
+      "expected_output": "The agent types with real input events (not by setting .value), then reads the value back from the DOM before clicking Next.",
+      "files": [],
+      "expectations": [
+        "Agent focuses the field and types with real keystrokes or Input.insertText",
+        "Agent does not set .value directly and dispatch a synthetic input event as the only input method",
+        "Agent reads the field's value back from the DOM before clicking Next"
+      ]
+    }
+  ]
+}
