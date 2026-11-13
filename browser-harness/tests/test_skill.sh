@@ -27,6 +27,11 @@ check "SKILL.md names Appian trigger terms" grep -qi 'appiancloud.com' "$SKILL/S
 check "Appian reference has no YAML frontmatter (not a standalone skill)" test "$(head -1 "$SKILL/references/appian-sail.md")" != "---"
 check "Appian reference covers fresh position queries" grep -qi 'fresh' "$SKILL/references/appian-sail.md"
 check "Appian reference covers React typing verification" grep -qi 'React' "$SKILL/references/appian-sail.md"
+for f in bh start-browser.sh stop-browser.sh; do
+  check "scripts/$f exists and is executable" test -x "$SKILL/scripts/$f"
+  check "scripts/$f passes bash -n" bash -n "$SKILL/scripts/$f"
+done
+check "SKILL.md documents the launch scripts" grep -q '^## Isolated Chrome' "$SKILL/SKILL.md"
 check "browser-harness is not in skills-sync.json" test "$(jq -r '.sources | has("browser-harness")' "$ROOT/skills-sync.json")" = "false"
 check "evals.json is valid JSON" jq -e . "$SKILL/evals/evals.json"
 check "evals.json skill_name matches" test "$(jq -r .skill_name "$SKILL/evals/evals.json")" = "browser-harness"

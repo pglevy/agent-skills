@@ -136,6 +136,23 @@ dialog. Their click completes the same handshake, so resume or poll the original
 process for success; do not rerun it or create a replacement daemon. If that
 Chrome build presents no approval dialog, the original command simply connects.
 
+## Isolated Chrome (launch scripts)
+
+When the user wants a clean, separate browser instead of their everyday Chrome (no logins or tabs carried over, no "Allow remote debugging?" prompt, fixed 1440x900 headless viewport, popups allowed), use the scripts in this skill's `scripts/` directory. Run them from the project root; the profile, pid file, and log are created in the current directory (set `BH_WORKSPACE` to override) and should be gitignored (`.browser-profile*`).
+
+```bash
+scripts/start-browser.sh [--headed]   # launch isolated Chrome on port 9333 (BH_PORT overrides); --headed shows a window
+scripts/bh <<'PY'                     # browser-harness bound to that Chrome (BU_NAME=exp3gen, BU_CDP_URL, no tab marker)
+print(page_info())
+PY
+scripts/stop-browser.sh               # stop the daemon and Chrome; the next start wipes the profile
+```
+
+- Use `scripts/bh` instead of bare `browser-harness` for this instance; the bare command attaches to the user's everyday Chrome.
+- Start is idempotent: if the port already answers, it reports ready and exits.
+- macOS path to Chrome is hardcoded in `start-browser.sh`; adjust `CHROME` on other platforms.
+- The fixed daemon name `exp3gen` is deliberate here (a single isolated instance), an exception to the "don't invent daemon names" rule above.
+
 ## Remote Browsers
 
 Use Browser Use cloud for headless servers, parallel sub-agents, or isolated work.
