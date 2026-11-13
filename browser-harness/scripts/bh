@@ -4,7 +4,7 @@
 #   scripts/bh <<'PY'
 #   print(page_info())
 #   PY
-export BU_NAME="exp3gen"
+export BU_NAME="pony"
 export BU_CDP_URL="http://127.0.0.1:${BH_PORT:-9333}"
 export BH_TAB_MARKER=0
 exec browser-harness "$@"

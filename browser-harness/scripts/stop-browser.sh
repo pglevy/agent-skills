@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Stop the isolated Chrome in this workspace (current dir or BH_WORKSPACE) and its named browser-harness daemon (exp3gen).
+# Stop the isolated Chrome in this workspace (current dir or BH_WORKSPACE) and its named browser-harness daemon (pony).
 # Leaves the default daemon (the user's everyday Chrome) alone.
 set -uo pipefail
 
 ROOT="$(cd "${BH_WORKSPACE:-$PWD}" && pwd)"
 PIDFILE="$ROOT/.browser-profile.pid"
-NAME="exp3gen"
+NAME="pony"
 RUNTIME="${XDG_CONFIG_HOME:-$HOME/.config}/browser-harness/runtime"
 
 if [[ -f "$RUNTIME/bu-$NAME.pid" ]]; then
